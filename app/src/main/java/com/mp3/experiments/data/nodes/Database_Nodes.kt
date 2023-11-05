@@ -5,6 +5,7 @@ const val NODE_USERS = "users"
 const val NODE_MOVIES = "movies"
 
 const val NODE_CINEMA = "cinemas"
+const val NODE_CINEMA_DETAILS = "cinemaDetails"
 
 // seat nodes
 const val NODE_SEATS = "seats"

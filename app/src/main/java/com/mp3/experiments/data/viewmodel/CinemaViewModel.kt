@@ -11,6 +11,7 @@ import com.google.firebase.storage.ktx.storage
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.SeatsModel
 import com.mp3.experiments.data.nodes.NODE_CINEMA
+import com.mp3.experiments.data.nodes.NODE_CINEMA_DETAILS
 import com.mp3.experiments.data.nodes.NODE_LOWERBOX
 import com.mp3.experiments.data.nodes.NODE_MIDDLEBOX
 import com.mp3.experiments.data.nodes.NODE_SEATS
@@ -49,10 +50,19 @@ class CinemaViewModel : ViewModel() {
     ) {
         val numRows = lowerbox_length + middlebox_length + upperbox_length
         val numColumns = lowerbox_width + middlebox_width + upperbox_width
-        val seatsRef = firebase_database.child(NODE_CINEMA)
+        val cinemaRef = firebase_database.child(NODE_CINEMA)
+
+        val cinemaCapacity = numRows * numColumns
+
+        val cinemaDetails = CinemaModel(cinemaLocation, cinemaName, cinemaCapacity, upperbox_length, middlebox_length, lowerbox_length, upperbox_width, middlebox_width, lowerbox_width, "n/a")
+        val cinemaRef0 = cinemaRef
+            .child(cinemaLocation)
+            .child(cinemaName)
+            .child(NODE_CINEMA_DETAILS)
+        cinemaRef0.setValue(cinemaDetails)
 
         for (theatre in 0 until numOf_theatres) {
-            val theatreRef = seatsRef
+            val theatreRef = cinemaRef
                 .child(cinemaLocation)
                 .child(cinemaName)
                 .child("Theatre${theatre + 1}")

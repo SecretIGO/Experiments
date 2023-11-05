@@ -17,16 +17,6 @@ class AddCinemaActivity : AppCompatActivity() {
 
         viewModel = CinemaViewModel()
 
-//        val cinemaLocation = binding.inputCinemaLocation.text.toString()
-//        val cinemaName = binding.inputCinemaName.text.toString()
-//        val numOf_theatres = binding.inputNumOfTheatres.text.toString().toInt()
-//        val upperbox_width = binding.inputUpperWidth.text.toString().toInt()
-//        val middlebox_width = binding.inputMiddleWidth.text.toString().toInt()
-//        val lowerbox_width = binding.inputLowerWidth.text.toString().toInt()
-//        val upperbox_length = binding.inputUpperLength.text.toString().toInt()
-//        val middlebox_length = binding.inputMiddleLength.text.toString().toInt()
-//        val lowerbox_length = binding.inputLowerLength.text.toString().toInt()
-
         binding.btnAddCinema.setOnClickListener{
 
             viewModel.checkIfCinemaExists(
