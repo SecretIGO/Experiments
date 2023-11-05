@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FilmFlick</string>
+    <string name="hint_upperbox_width">Upperbox Width</string>
+    <string name="hint_upperbox_length">Upperbox Length</string>
+    <string name="hint_middlebox_width">Middlebox Width</string>
+    <string name="hint_middlebox_length">Middlebox Length</string>
+    <string name="hint_lowerbox_width">Lowerbox Width</string>
+    <string name="hint_lowerbox_length">Lowerbox Length</string>
+</resources>

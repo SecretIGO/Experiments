@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "218659913119",
+    "firebase_url": "https://seg31-lazo-n-tolentino-j-default-rtdb.firebaseio.com",
+    "project_id": "seg31-lazo-n-tolentino-j",
+    "storage_bucket": "seg31-lazo-n-tolentino-j.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218659913119:android:2093a48d5a08426aae51aa",
+        "android_client_info": {
+          "package_name": "com.mp3.experiments"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBK9gVIJKn4DSJvJKHX9XCX0pJnbZZ8hio"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
