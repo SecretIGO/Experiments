@@ -9,30 +9,74 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.mp3.experiments.R
+import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.ActivitySeatSelectionBinding
 
 class SeatSelectionActivity : AppCompatActivity() {
 
-    private var left_width = 5
-    private var middle_width = 14
-    private var right_width = 5
-    private var numColumns = left_width+middle_width+right_width
-    private var numRows = 15
+    private var upper_length = 0
+    private var middle_length = 0
+    private var lower_length = 0
+
+    private var upper_width = 0
+    private var middle_width = 0
+    private var lower_width = 0
+
+    var numRows = upper_length+middle_length+lower_length
+    var numColumns = upper_width+middle_width+lower_width
+
+    var seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
+    var seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
 
     private var seatSelected_count = 0
 
-    private var seatStatus = Array(numRows) { BooleanArray(numColumns) }
-    private var seatOccupied = Array(numRows) { BooleanArray(numColumns)}
-
     private lateinit var binding : ActivitySeatSelectionBinding
+    private lateinit var viewModel : CinemaViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySeatSelectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
-        seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
+        viewModel = CinemaViewModel()
+
+        Log.d("test123", "fun call start")
+        viewModel.getCinemaDetails("Makati", "Test") { cinemaModel ->
+
+            if (cinemaModel != null) {
+                Log.d("test123", "vm reach")
+
+                upper_length = cinemaModel.cinema_upperbox_length!!
+                middle_length = cinemaModel.cinema_middlebox_length!!
+                lower_length = cinemaModel.cinema_lowerbox_length!!
+
+                upper_width = cinemaModel.cinema_upperbox_width!!
+                middle_width = cinemaModel.cinema_middlebox_width!!
+                lower_width = cinemaModel.cinema_lowerbox_width!!
+
+                numRows = upper_length+middle_length+lower_length
+                numColumns = upper_width+middle_width+lower_width
+
+                seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
+                seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
+
+                binding.gridLayout.rowCount = numRows
+                binding.gridLayout.columnCount = numColumns
+
+                for (row in 0 until numRows) {
+                    for (col in 0 until numColumns) {
+                        val seat = createSeatView(row, col)
+                        binding.gridLayout.addView(seat)
+                    }
+                }
+
+                Log.d("test123", "$upper_length $middle_length $lower_length")
+            } else {
+                Log.d("test123", "vm is null")
+            }
+        }
+
+        Log.d("test123", "fun call end")
 
         val receivedBundle = intent.getBundleExtra("matrixBundle")
         val receivedMatrix = receivedBundle?.getSerializable("seatOccupied") as? Array<BooleanArray>
@@ -40,16 +84,6 @@ class SeatSelectionActivity : AppCompatActivity() {
         if (receivedMatrix != null) {
             seatOccupied = receivedMatrix
         } else {
-        }
-
-        binding.gridLayout.rowCount = numRows
-        binding.gridLayout.columnCount = numColumns
-
-        for (row in 0 until numRows) {
-            for (col in 0 until numColumns) {
-                val seat = createSeatView(row, col, left_width, middle_width, right_width)
-                binding.gridLayout.addView(seat)
-            }
         }
 
         binding.btnClearInputs.setOnClickListener{
@@ -70,21 +104,24 @@ class SeatSelectionActivity : AppCompatActivity() {
             val intent = Intent(this, SeatSelectionActivity::class.java)
             val bundle = Bundle()
             bundle.putSerializable("seatOccupied", seatOccupied)
-            Log.d("test123", "$bundle")
             intent.putExtra("matrixBundle", bundle)
             startActivity(intent)
             overridePendingTransition(0, 0)
         }
     }
 
-    private fun createSeatView(row: Int, col: Int, left_width: Int, middle_width: Int, right_width: Int): ImageView {
+    private fun createSeatView(
+        row: Int,
+        col: Int,
+    ): ImageView {
         val seat = ImageView(this)
 
+        val numRows = upper_length + middle_length + lower_length
+        val numColumns = upper_width + middle_width + lower_width
+
         if (seatOccupied[row][col]){
-            Log.d("test123", "${seatOccupied[row][col]}")
             seat.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.filmflick_seat_unavailable))
         } else {
-            Log.d("test123", "${seatOccupied[row][col]}")
             seat.setImageResource(R.drawable.filmflick_seat_available)
         }
 
@@ -101,12 +138,12 @@ class SeatSelectionActivity : AppCompatActivity() {
         params.width = seatSizeInPixels
         params.height = seatSizeInPixels
 
-        if (col == left_width-1 || col == left_width+middle_width-1){
+        if (col == upper_width-1 || col == upper_width+middle_width-1){
             val rightMarginInPixels = (250).toInt() // Adjust the margin as needed
             params.rightMargin = rightMarginInPixels
         }
 
-        if (row == (numRows/3) || row == (numRows/3)*2){
+        if (row == upper_length || row == upper_length+middle_length) {
             val topMarginInPixels = (250).toInt() // Adjust the margin as needed
             params.topMargin = topMarginInPixels
         } else {
@@ -120,7 +157,12 @@ class SeatSelectionActivity : AppCompatActivity() {
         return seat
     }
 
-    private fun handleSeatSelection(row: Int, col: Int) {
+    private fun handleSeatSelection(
+        row: Int,
+        col: Int) {
+
+        Log.d("test123", "$numRows")
+        Log.d("test123", "$numColumns")
 
         if (seatOccupied[row][col]) {
             Toast.makeText(this, "Seat ${(64+(numRows)-row).toChar()}${col+1} is occupied", Toast.LENGTH_SHORT).show()

@@ -1,19 +1,27 @@
 package com.mp3.experiments.data.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.SeatsModel
+import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.data.nodes.NODE_CINEMA
 import com.mp3.experiments.data.nodes.NODE_CINEMA_DETAILS
 import com.mp3.experiments.data.nodes.NODE_LOWERBOX
 import com.mp3.experiments.data.nodes.NODE_MIDDLEBOX
+import com.mp3.experiments.data.nodes.NODE_MOVIE_DETAILS
 import com.mp3.experiments.data.nodes.NODE_SEATS
 import com.mp3.experiments.data.nodes.NODE_UPPERBOX
 
@@ -33,6 +41,29 @@ class CinemaViewModel : ViewModel() {
                 false
             }
         }
+    }
+
+    fun getCinemaDetails(cinemaLocation: String, cinemaName: String, callback: (CinemaModel?) -> Unit) {
+        val cinemaDetailsRef = firebase_database.child(NODE_CINEMA).child(cinemaLocation).child(cinemaName).child("cinemaDetails")
+
+        Log.d("test123", "$cinemaDetailsRef")
+        Log.d("test123", "fun intro")
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val cinemaData = dataSnapshot.getValue<CinemaModel>()
+                Log.d("test123", "${cinemaData?.cinema_capacity}")
+                callback(cinemaData)
+                Log.d("test123", "fun success")
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(null)
+                Log.d("test123", "fun cancelled: $databaseError")
+            }
+        }
+        Log.d("test123", "fun end-1")
+        cinemaDetailsRef.addValueEventListener(valueEventListener)
+        Log.d("test123", "fun end-2")
     }
 
     fun createCinema_toDatabase(
@@ -66,6 +97,9 @@ class CinemaViewModel : ViewModel() {
                 .child(cinemaLocation)
                 .child(cinemaName)
                 .child("Theatre${theatre + 1}")
+
+            val movie = TheatreMovieModel("", 0.0, "", "")
+            theatreRef.child(NODE_MOVIE_DETAILS).setValue(movie)
 
             for (row in 0 until numRows) {
                 val section =
