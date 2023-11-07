@@ -43,7 +43,6 @@ class SeatSelectionActivity : AppCompatActivity() {
         val cinemaLocation = intent.getStringExtra("cinemaLocation")
         val cinemaName = intent.getStringExtra("cinemaName")
 
-        Log.d("test123", "fun call start")
         if (cinemaLocation != null && cinemaName != null) {
             viewModel.getCinemaDetails(cinemaLocation, cinemaName) { cinemaModel ->
 
@@ -110,6 +109,8 @@ class SeatSelectionActivity : AppCompatActivity() {
             val bundle = Bundle()
             bundle.putSerializable("seatOccupied", seatOccupied)
             intent.putExtra("matrixBundle", bundle)
+            intent.putExtra("cinemaLocation", cinemaLocation)
+            intent.putExtra("cinemaName", cinemaName)
             startActivity(intent)
             overridePendingTransition(0, 0)
         }
