@@ -44,10 +44,12 @@ class CinemaViewModel : ViewModel() {
     }
 
     fun getCinemaDetails(cinemaLocation: String, cinemaName: String, callback: (CinemaModel?) -> Unit) {
-        val cinemaDetailsRef = firebase_database.child(NODE_CINEMA).child(cinemaLocation).child(cinemaName).child("cinemaDetails")
+        val cinemaDetailsRef = firebase_database
+            .child(NODE_CINEMA)
+            .child(cinemaLocation)
+            .child(cinemaName)
+            .child(NODE_CINEMA_DETAILS)
 
-        Log.d("test123", "$cinemaDetailsRef")
-        Log.d("test123", "fun intro")
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val cinemaData = dataSnapshot.getValue<CinemaModel>()

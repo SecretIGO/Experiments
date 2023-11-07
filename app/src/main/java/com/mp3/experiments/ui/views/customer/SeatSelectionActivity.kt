@@ -40,39 +40,44 @@ class SeatSelectionActivity : AppCompatActivity() {
 
         viewModel = CinemaViewModel()
 
+        val cinemaLocation = intent.getStringExtra("cinemaLocation")
+        val cinemaName = intent.getStringExtra("cinemaName")
+
         Log.d("test123", "fun call start")
-        viewModel.getCinemaDetails("Makati", "Test") { cinemaModel ->
+        if (cinemaLocation != null && cinemaName != null) {
+            viewModel.getCinemaDetails(cinemaLocation, cinemaName) { cinemaModel ->
 
-            if (cinemaModel != null) {
-                Log.d("test123", "vm reach")
+                if (cinemaModel != null) {
+                    Log.d("test123", "vm reach")
 
-                upper_length = cinemaModel.cinema_upperbox_length!!
-                middle_length = cinemaModel.cinema_middlebox_length!!
-                lower_length = cinemaModel.cinema_lowerbox_length!!
+                    upper_length = cinemaModel.cinema_upperbox_length!!
+                    middle_length = cinemaModel.cinema_middlebox_length!!
+                    lower_length = cinemaModel.cinema_lowerbox_length!!
 
-                upper_width = cinemaModel.cinema_upperbox_width!!
-                middle_width = cinemaModel.cinema_middlebox_width!!
-                lower_width = cinemaModel.cinema_lowerbox_width!!
+                    upper_width = cinemaModel.cinema_upperbox_width!!
+                    middle_width = cinemaModel.cinema_middlebox_width!!
+                    lower_width = cinemaModel.cinema_lowerbox_width!!
 
-                numRows = upper_length+middle_length+lower_length
-                numColumns = upper_width+middle_width+lower_width
+                    numRows = upper_length+middle_length+lower_length
+                    numColumns = upper_width+middle_width+lower_width
 
-                seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
-                seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
+                    seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
+                    seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
 
-                binding.gridLayout.rowCount = numRows
-                binding.gridLayout.columnCount = numColumns
+                    binding.gridLayout.rowCount = numRows
+                    binding.gridLayout.columnCount = numColumns
 
-                for (row in 0 until numRows) {
-                    for (col in 0 until numColumns) {
-                        val seat = createSeatView(row, col)
-                        binding.gridLayout.addView(seat)
+                    for (row in 0 until numRows) {
+                        for (col in 0 until numColumns) {
+                            val seat = createSeatView(row, col)
+                            binding.gridLayout.addView(seat)
+                        }
                     }
-                }
 
-                Log.d("test123", "$upper_length $middle_length $lower_length")
-            } else {
-                Log.d("test123", "vm is null")
+                    Log.d("test123", "$upper_length $middle_length $lower_length")
+                } else {
+                    Log.d("test123", "vm is null")
+                }
             }
         }
 
