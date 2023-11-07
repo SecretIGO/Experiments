@@ -15,6 +15,7 @@ import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.mp3.experiments.data.model.CinemaModel
+import com.mp3.experiments.data.model.SeatTimeslotModel
 import com.mp3.experiments.data.model.SeatsModel
 import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.data.nodes.NODE_CINEMA
@@ -27,6 +28,54 @@ import com.mp3.experiments.data.nodes.NODE_UPPERBOX
 
 class CinemaViewModel : ViewModel() {
     private val firebase_database = Firebase.database.reference
+
+    fun updateSeatOccupied(
+        row: Int,
+        col: Int,
+        cinemaLocation: String,
+        cinemaName: String,
+        theaterName: String,
+        showtime : String,
+        lowerbox_length: Int,
+        middlebox_length: Int,
+        numRows : Int,
+        numColumns : Int,
+        callback: (SeatTimeslotModel?) -> Unit
+    ) {
+        val section =
+            if (row < lowerbox_length) NODE_LOWERBOX
+            else if (row < lowerbox_length + middlebox_length) NODE_MIDDLEBOX
+            else NODE_UPPERBOX
+
+        val seatOccupancyRef = firebase_database
+            .child(NODE_CINEMA)
+            .child(cinemaLocation)
+            .child(cinemaName)
+            .child(theaterName)
+            .child(NODE_SEATS)
+            .child(section)
+            .child("${(64+row+1).toChar()}")
+            .child("${col + 1}")
+            .child("seat_movie_timeslot")
+
+//        Log.d("test12", "${(64 + row + 1).toChar()} ${col + 1}")
+
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val seatTimeData = dataSnapshot.getValue<SeatTimeslotModel>()
+                callback(seatTimeData)
+                Log.d("test123", "occupied: ${seatTimeData?.occupied} time: ${seatTimeData?.time}")
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(null)
+                Log.d("test123", "fun cancelled: $databaseError")
+            }
+        }
+        seatOccupancyRef.addValueEventListener(valueEventListener)
+    }
+
+
 
     fun checkIfCinemaExists(cinemaLocation: String, cinemaName: String): Task<Boolean> {
         val cinemaRef = firebase_database.child(NODE_CINEMA)

@@ -44,6 +44,7 @@ class SeatSelectionActivity : AppCompatActivity() {
         val cinemaName = intent.getStringExtra("cinemaName")
 
         if (cinemaLocation != null && cinemaName != null) {
+
             viewModel.getCinemaDetails(cinemaLocation, cinemaName) { cinemaModel ->
 
                 if (cinemaModel != null) {
@@ -66,10 +67,30 @@ class SeatSelectionActivity : AppCompatActivity() {
                     binding.gridLayout.rowCount = numRows
                     binding.gridLayout.columnCount = numColumns
 
-                    for (row in 0 until numRows) {
+                    for (row in numRows downTo 0) {
                         for (col in 0 until numColumns) {
-                            val seat = createSeatView(row, col)
-                            binding.gridLayout.addView(seat)
+                            Log.d("test234", "$row$col")
+                            viewModel.updateSeatOccupied(
+                                row,
+                                col,
+                                cinemaLocation,
+                                cinemaName,
+                                "Theatre1",
+                                "",
+                                lower_length,
+                                middle_length,
+                                numRows,
+                                numColumns
+                            ) { seatData ->
+
+                                if (seatData != null) {
+                                    seatOccupied[numRows - row - 1][col] = seatData.occupied!!
+                                    val seat = createSeatView(numRows - row - 1, col)
+                                    binding.gridLayout.addView(seat)
+                                } else {
+                                    Log.d("ntest", "seatData is null")
+                                }
+                            }
                         }
                     }
 
@@ -82,13 +103,13 @@ class SeatSelectionActivity : AppCompatActivity() {
 
         Log.d("test123", "fun call end")
 
-        val receivedBundle = intent.getBundleExtra("matrixBundle")
-        val receivedMatrix = receivedBundle?.getSerializable("seatOccupied") as? Array<BooleanArray>
-
-        if (receivedMatrix != null) {
-            seatOccupied = receivedMatrix
-        } else {
-        }
+//        val receivedBundle = intent.getBundleExtra("matrixBundle")
+//        val receivedMatrix = receivedBundle?.getSerializable("seatOccupied") as? Array<BooleanArray>
+//
+//        if (receivedMatrix != null) {
+//            seatOccupied = receivedMatrix
+//        } else {
+//        }
 
         binding.btnClearInputs.setOnClickListener{
             finish()
@@ -121,9 +142,6 @@ class SeatSelectionActivity : AppCompatActivity() {
         col: Int,
     ): ImageView {
         val seat = ImageView(this)
-
-        val numRows = upper_length + middle_length + lower_length
-        val numColumns = upper_width + middle_width + lower_width
 
         if (seatOccupied[row][col]){
             seat.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.filmflick_seat_unavailable))
@@ -171,7 +189,7 @@ class SeatSelectionActivity : AppCompatActivity() {
         Log.d("test123", "$numColumns")
 
         if (seatOccupied[row][col]) {
-            Toast.makeText(this, "Seat ${(64+(numRows)-row).toChar()}${col+1} is occupied", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Seat ${(64+numRows-row).toChar()}${col+1} is occupied", Toast.LENGTH_SHORT).show()
         } else {
             if (seatStatus[row][col]) {
                 seatStatus[row][col] = false
@@ -195,16 +213,16 @@ class SeatSelectionActivity : AppCompatActivity() {
         var tempStr = binding.tvSeatSelected.text.toString()
 
         if (tempStr == "n/a")
-            binding.tvSeatSelected.text = "${(64+(numRows)-row).toChar()}${col+1}"
+            binding.tvSeatSelected.text = "${(64+numRows-row).toChar()}${col+1}"
         else {
-            tempStr += ", ${(64+(numRows)-row).toChar()}${col+1}"
+            tempStr += ", ${(64+numRows-row).toChar()}${col+1}"
             binding.tvSeatSelected.text = tempStr
         }
     }
 
     private fun removeSelectedSeat(row: Int, col: Int){
         val tempStr = binding.tvSeatSelected.text.toString()
-        val seat_label = "${(64+(numRows)-row).toChar()}${col+1}"
+        val seat_label = "${(64+numRows-row).toChar()}${col+1}"
         val newStr =
             if (tempStr.startsWith(seat_label)) {
                 tempStr.replace(Regex("$seat_label,?\\s*"), "").trim()
