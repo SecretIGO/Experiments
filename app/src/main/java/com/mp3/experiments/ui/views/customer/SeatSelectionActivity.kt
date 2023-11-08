@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.mp3.experiments.R
+import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.ActivitySeatSelectionBinding
 
@@ -40,76 +41,42 @@ class SeatSelectionActivity : AppCompatActivity() {
 
         viewModel = CinemaViewModel()
 
-        val cinemaLocation = intent.getStringExtra("cinemaLocation")
-        val cinemaName = intent.getStringExtra("cinemaName")
+        val cinemaModel_parcel = intent.getParcelableExtra<CinemaModel>("cinemaModel")
+        val receivedBundle = intent.getBundleExtra("matrixBundle")
+        val receivedMatrix = receivedBundle?.getSerializable("seatOccupied") as? Array<BooleanArray>
 
-        if (cinemaLocation != null && cinemaName != null) {
+        upper_length = cinemaModel_parcel?.cinema_upperbox_length!!
+        middle_length = cinemaModel_parcel.cinema_middlebox_length!!
+        lower_length = cinemaModel_parcel.cinema_lowerbox_length!!
 
-            viewModel.getCinemaDetails(cinemaLocation, cinemaName) { cinemaModel ->
+        upper_width = cinemaModel_parcel.cinema_upperbox_width!!
+        middle_width = cinemaModel_parcel.cinema_middlebox_width!!
+        lower_width = cinemaModel_parcel.cinema_lowerbox_width!!
 
-                if (cinemaModel != null) {
-                    Log.d("test123", "vm reach")
+        numRows = upper_length+middle_length+lower_length
+        numColumns = upper_width+middle_width+lower_width
 
-                    upper_length = cinemaModel.cinema_upperbox_length!!
-                    middle_length = cinemaModel.cinema_middlebox_length!!
-                    lower_length = cinemaModel.cinema_lowerbox_length!!
+        binding.gridLayout.rowCount = numRows
+        binding.gridLayout.columnCount = numColumns
 
-                    upper_width = cinemaModel.cinema_upperbox_width!!
-                    middle_width = cinemaModel.cinema_middlebox_width!!
-                    lower_width = cinemaModel.cinema_lowerbox_width!!
+        seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
+        seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
 
-                    numRows = upper_length+middle_length+lower_length
-                    numColumns = upper_width+middle_width+lower_width
-
-                    seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
-                    seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
-
-                    binding.gridLayout.rowCount = numRows
-                    binding.gridLayout.columnCount = numColumns
-
-                    for (row in numRows downTo 0) {
-                        for (col in 0 until numColumns) {
-                            Log.d("test234", "$row$col")
-                            viewModel.updateSeatOccupied(
-                                row,
-                                col,
-                                cinemaLocation,
-                                cinemaName,
-                                "Theatre1",
-                                "",
-                                lower_length,
-                                middle_length,
-                                numRows,
-                                numColumns
-                            ) { seatData ->
-
-                                if (seatData != null) {
-                                    seatOccupied[numRows - row - 1][col] = seatData.occupied!!
-                                    val seat = createSeatView(numRows - row - 1, col)
-                                    binding.gridLayout.addView(seat)
-                                } else {
-                                    Log.d("ntest", "seatData is null")
-                                }
-                            }
-                        }
-                    }
-
-                    Log.d("test123", "$upper_length $middle_length $lower_length")
-                } else {
-                    Log.d("test123", "vm is null")
-                }
-            }
+        if (receivedMatrix != null) {
+            seatOccupied = receivedMatrix
+        } else {
         }
 
-        Log.d("test123", "fun call end")
+        Toast.makeText(this, "${seatOccupied[0][0]} ${seatOccupied[0][1]} ${seatOccupied[0][2]}", Toast.LENGTH_SHORT).show()
 
-//        val receivedBundle = intent.getBundleExtra("matrixBundle")
-//        val receivedMatrix = receivedBundle?.getSerializable("seatOccupied") as? Array<BooleanArray>
-//
-//        if (receivedMatrix != null) {
-//            seatOccupied = receivedMatrix
-//        } else {
-//        }
+        Log.d("test123", "$numRows")
+
+        for (row in 0 until  numRows) {
+            for (col in 0 until numColumns) {
+                val seat = createSeatView(row, col)
+                binding.gridLayout.addView(seat)
+            }
+        }
 
         binding.btnClearInputs.setOnClickListener{
             finish()
@@ -130,8 +97,6 @@ class SeatSelectionActivity : AppCompatActivity() {
             val bundle = Bundle()
             bundle.putSerializable("seatOccupied", seatOccupied)
             intent.putExtra("matrixBundle", bundle)
-            intent.putExtra("cinemaLocation", cinemaLocation)
-            intent.putExtra("cinemaName", cinemaName)
             startActivity(intent)
             overridePendingTransition(0, 0)
         }

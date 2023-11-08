@@ -23,13 +23,14 @@ import com.mp3.experiments.data.nodes.NODE_CINEMA_DETAILS
 import com.mp3.experiments.data.nodes.NODE_LOWERBOX
 import com.mp3.experiments.data.nodes.NODE_MIDDLEBOX
 import com.mp3.experiments.data.nodes.NODE_MOVIE_DETAILS
+import com.mp3.experiments.data.nodes.NODE_MOVIE_TIMESLOT
 import com.mp3.experiments.data.nodes.NODE_SEATS
 import com.mp3.experiments.data.nodes.NODE_UPPERBOX
 
 class CinemaViewModel : ViewModel() {
     private val firebase_database = Firebase.database.reference
 
-    fun updateSeatOccupied(
+    fun getSeatOccupied(
         row: Int,
         col: Int,
         cinemaLocation: String,
@@ -38,8 +39,6 @@ class CinemaViewModel : ViewModel() {
         showtime : String,
         lowerbox_length: Int,
         middlebox_length: Int,
-        numRows : Int,
-        numColumns : Int,
         callback: (SeatTimeslotModel?) -> Unit
     ) {
         val section =

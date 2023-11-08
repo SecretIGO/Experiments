@@ -1,5 +1,9 @@
 package com.mp3.experiments.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 class CinemaModel (
     val cinema_location : String?= "",
 
@@ -14,4 +18,4 @@ class CinemaModel (
     val cinema_lowerbox_width : Int? = 0,
 
     val cinema_logo : String? = ""
-)
+) : Parcelable
