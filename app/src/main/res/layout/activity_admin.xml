@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,126 +7,186 @@
     tools:context=".ui.views.admin.AdminActivity"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Welcome Admin!"
-        android:textSize="24sp"
-        android:gravity="center"
-        android:padding="10dp"/>
+        android:orientation="vertical">
 
-    <ImageButton
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="10dp"
-        android:background="@color/red_400"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cinema Settings"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:background="@color/red_400"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add or customize the theatre(s)"
-        android:layout_gravity="center"/>
-
-    <GridLayout
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:rowCount="3"
-        android:columnCount="2">
-
-        <Button
-            android:id="@+id/btn_addCinema"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/red_400"
-            android:text="Add Cinema"/>
-
-        <Button
-            android:id="@+id/btn_editCinema"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/red_400"
-            android:text="Edit Cinema"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/btn_deleteCinema"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/red_800"
-            android:text="Delete Cinema"/>
-    </GridLayout>
-
-    <ImageButton
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="10dp"
-        android:background="@color/red_400"
-        />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cinema Sales Statistics"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:background="@color/red_400"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search for a specific theatre to check for sales"
-        android:layout_gravity="center"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/rl_logo"
-        tools:layout_editor_absoluteX="0dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_CinemaLocation"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Cinema Location"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="334dp" />
+            android:text="Welcome Admin!"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:padding="10dp"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="@color/red_400"
+            />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        tools:layout_editor_absoluteX="16dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/input_password"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Theatre Number"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="334dp" />
+            android:text="Cinema Settings"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="@color/red_400"
+            />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add or customize the theatre(s)"
+            android:layout_gravity="center"/>
 
-</LinearLayout>
+        <GridLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:rowCount="3"
+            android:columnCount="2">
+
+            <Button
+                android:id="@+id/btn_addCinema"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red_400"
+                android:text="Add Cinema"/>
+
+            <Button
+                android:id="@+id/btn_editCinema"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red_400"
+                android:text="Edit Cinema"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_deleteCinema"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red_800"
+                android:text="Delete Cinema"/>
+        </GridLayout>
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="@color/red_400"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cinema Sales Statistics"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="@color/red_400"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search for a specific theatre to check for sales"
+            android:layout_gravity="center"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/rl_logo"
+            tools:layout_editor_absoluteX="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_CinemaLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cinema Location"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="334dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+            tools:layout_editor_absoluteX="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Theatre Number"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="334dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Movie Settings"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:background="@color/red_400"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add or customize the theatre(s)"
+            android:layout_gravity="center"/>
+
+        <GridLayout
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:rowCount="3"
+            android:columnCount="2">
+
+            <Button
+                android:id="@+id/btn_addMovie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red_400"
+                android:text="Add Movie"/>
+
+            <Button
+                android:id="@+id/btn_editMovie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red_400"
+                android:text="Edit Movie"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_deleteMovie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red_800"
+                android:text="Delete Movie"/>
+        </GridLayout>
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="@color/red_400"
+            />
+
+    </LinearLayout>
+
+</ScrollView>

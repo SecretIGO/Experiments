@@ -9,6 +9,12 @@ import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.ActivityMovieTheatreSelectionBinding
 
 class MovieTheatreSelectionActivity : AppCompatActivity() {
+
+    var numRows = 0
+    var numColumns = 0
+
+    var seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
+
     private lateinit var binding : ActivityMovieTheatreSelectionBinding
     private lateinit var viewModel : CinemaViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,14 +34,13 @@ class MovieTheatreSelectionActivity : AppCompatActivity() {
                 binding.inputCinemaName.text.toString())
 
                 .addOnSuccessListener { exists ->
-                    Toast.makeText(this, "$exists", Toast.LENGTH_SHORT).show()
                     if (exists) {
                         val intent = Intent(this, MovieSelectionActivity::class.java)
                         intent.putExtra("cinemaLocation", binding.inputCinemaLocation.text.toString())
                         intent.putExtra("cinemaName", binding.inputCinemaName.text.toString())
                         startActivity(intent)
                     } else {
-                        Toast.makeText(this, "${binding.inputCinemaName.text.toString()} at ${binding.inputCinemaLocation.text.toString()} Does Not Exist!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Cinema : ${binding.inputCinemaName.text.toString()}\nLocation : ${binding.inputCinemaLocation.text.toString()}\nDoes Not Exist!", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

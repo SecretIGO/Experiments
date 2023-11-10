@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mp3.experiments.databinding.ActivitySplashBinding
-import com.mp3.experiments.ui.views.admin.AddCinemaActivity
-import com.mp3.experiments.ui.views.customer.SeatSelectionActivity
 import java.util.Timer
 import kotlin.concurrent.schedule
 

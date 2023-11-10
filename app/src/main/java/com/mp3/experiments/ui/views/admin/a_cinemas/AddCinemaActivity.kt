@@ -1,4 +1,4 @@
-package com.mp3.experiments.ui.views.admin
+package com.mp3.experiments.ui.views.admin.a_cinemas
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,7 +20,6 @@ class AddCinemaActivity : AppCompatActivity() {
         binding.btnAddCinema.setOnClickListener{
 
             viewModel.checkIfCinemaExists(
-
                 binding.inputCinemaLocation.text.toString(),
                 binding.inputCinemaName.text.toString())
 

@@ -3,8 +3,9 @@ package com.mp3.experiments.ui.views.admin
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.mp3.experiments.R
 import com.mp3.experiments.databinding.ActivityAdminBinding
+import com.mp3.experiments.ui.views.admin.a_cinemas.AddCinemaActivity
+import com.mp3.experiments.ui.views.admin.a_movies.AddMovieActivity
 
 class AdminActivity : AppCompatActivity() {
     private lateinit var binding : ActivityAdminBinding
@@ -16,6 +17,10 @@ class AdminActivity : AppCompatActivity() {
 
         binding.btnAddCinema.setOnClickListener {
             startActivity(Intent(this, AddCinemaActivity::class.java))
+        }
+
+        binding.btnAddMovie.setOnClickListener {
+            startActivity(Intent(this, AddMovieActivity::class.java))
         }
     }
 }

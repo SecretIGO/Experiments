@@ -6,8 +6,11 @@
 
 
     <color name="red_400">#FF6161</color>
+    <color name="red_600">#982E2E</color>
     <color name="red_800">#3E0000</color>
 
 
     <color name="green">#00FF00</color>
+
+    <color name="clear">#00FF0000</color>
 </resources>

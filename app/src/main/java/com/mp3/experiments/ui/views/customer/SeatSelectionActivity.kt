@@ -9,11 +9,12 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.mp3.experiments.R
+import com.mp3.experiments.data.interfaces.LoopCompleteCallbackInterface
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.ActivitySeatSelectionBinding
 
-class SeatSelectionActivity : AppCompatActivity() {
+class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface {
 
     private var upper_length = 0
     private var middle_length = 0
@@ -26,8 +27,13 @@ class SeatSelectionActivity : AppCompatActivity() {
     var numRows = upper_length+middle_length+lower_length
     var numColumns = upper_width+middle_width+lower_width
 
+    var theatreNumber = ""
+
     var seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
+    var seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
     var seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
+
+    private lateinit var cinemaModel : CinemaModel
 
     private var seatSelected_count = 0
 
@@ -41,17 +47,18 @@ class SeatSelectionActivity : AppCompatActivity() {
 
         viewModel = CinemaViewModel()
 
-        val cinemaModel_parcel = intent.getParcelableExtra<CinemaModel>("cinemaModel")
+        theatreNumber = intent.getStringExtra("theatreNumber")!!
+        cinemaModel = intent.getParcelableExtra<CinemaModel>("cinemaModel")!!
         val receivedBundle = intent.getBundleExtra("matrixBundle")
         val receivedMatrix = receivedBundle?.getSerializable("seatOccupied") as? Array<BooleanArray>
 
-        upper_length = cinemaModel_parcel?.cinema_upperbox_length!!
-        middle_length = cinemaModel_parcel.cinema_middlebox_length!!
-        lower_length = cinemaModel_parcel.cinema_lowerbox_length!!
+        upper_length = cinemaModel?.cinema_upperbox_length!!
+        middle_length = cinemaModel.cinema_middlebox_length!!
+        lower_length = cinemaModel.cinema_lowerbox_length!!
 
-        upper_width = cinemaModel_parcel.cinema_upperbox_width!!
-        middle_width = cinemaModel_parcel.cinema_middlebox_width!!
-        lower_width = cinemaModel_parcel.cinema_lowerbox_width!!
+        upper_width = cinemaModel.cinema_upperbox_width!!
+        middle_width = cinemaModel.cinema_middlebox_width!!
+        lower_width = cinemaModel.cinema_lowerbox_width!!
 
         numRows = upper_length+middle_length+lower_length
         numColumns = upper_width+middle_width+lower_width
@@ -66,8 +73,6 @@ class SeatSelectionActivity : AppCompatActivity() {
             seatOccupied = receivedMatrix
         } else {
         }
-
-        Toast.makeText(this, "${seatOccupied[0][0]} ${seatOccupied[0][1]} ${seatOccupied[0][2]}", Toast.LENGTH_SHORT).show()
 
         Log.d("test123", "$numRows")
 
@@ -85,20 +90,20 @@ class SeatSelectionActivity : AppCompatActivity() {
         }
 
         binding.btnBuyTicket.setOnClickListener {
+            seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
+
             for (row in 0 until numRows) {
                 for (col in 0 until numColumns) {
                     if (seatStatus[row][col]) {
-                        seatOccupied[row][col] = true
+                        seatSelected[row][col] = true
+
+                    }
+                    if (row == numRows - 1 && col == numColumns - 1) {
+                        seatSelected = reverseRows(seatSelected)
+                        onLoopCompleted()
                     }
                 }
             }
-
-            val intent = Intent(this, SeatSelectionActivity::class.java)
-            val bundle = Bundle()
-            bundle.putSerializable("seatOccupied", seatOccupied)
-            intent.putExtra("matrixBundle", bundle)
-            startActivity(intent)
-            overridePendingTransition(0, 0)
         }
     }
 
@@ -200,5 +205,27 @@ class SeatSelectionActivity : AppCompatActivity() {
         } else {
             binding.tvSeatSelected.text = newStr
         }
+    }
+
+    override fun onLoopCompleted() {
+        val intent = Intent(this, BuyTicketActivity::class.java)
+        val bundle = Bundle()
+        val cinemaModel = cinemaModel
+        bundle.putSerializable("seatSelected", seatSelected)
+        intent.putExtra("matrixBundle", bundle)
+        intent.putExtra("cinemaModel", cinemaModel )
+        intent.putExtra("theatreNumber", theatreNumber)
+        intent.putExtra("seatSelected_count", seatSelected_count)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+    }
+
+    fun reverseRows(array: Array<BooleanArray>): Array<BooleanArray> {
+        val numRows = array.size
+        val reversedArray = Array(numRows) { BooleanArray(array[0].size) }
+        for (i in 0 until numRows) {
+            reversedArray[i] = array[numRows - i - 1]
+        }
+        return reversedArray
     }
 }
