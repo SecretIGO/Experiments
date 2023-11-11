@@ -123,12 +123,14 @@
 
     </ScrollView>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_addMovieToTheatre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add to Theatre!"
-        android:backgroundTint="@color/red_400"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:background="@drawable/squircle"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"
+        android:text="Add Movie to Theatre"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

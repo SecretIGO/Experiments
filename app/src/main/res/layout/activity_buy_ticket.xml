@@ -153,12 +153,13 @@
 
                         <TextView
                             android:id="@+id/tv_seat_Selected"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
                             android:text="n/a"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:gravity="center"/>
 
                     </com.google.android.material.card.MaterialCardView>
 
@@ -170,7 +171,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -300,11 +300,23 @@
 
                             </LinearLayout>
 
-                            <ImageButton
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_margin="10dp"
-                                android:background="@color/red_800" />
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:backgroundTint="@color/red_400"
+                        app:cardCornerRadius="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -341,6 +353,8 @@
 
             </androidx.cardview.widget.CardView>
 
+
+
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -349,14 +363,14 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_confirmSeats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/red_400"
+        android:background="@drawable/squircle"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"
         android:text="Confirm Seats"
         app:layout_constraintBottom_toBottomOf="parent"/>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

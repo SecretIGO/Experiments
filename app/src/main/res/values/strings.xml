@@ -7,4 +7,6 @@
     <string name="hint_lowerbox_width">Lowerbox Width</string>
     <string name="hint_lowerbox_length">Lowerbox Length</string>
     <string name="peso_sign">₱</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

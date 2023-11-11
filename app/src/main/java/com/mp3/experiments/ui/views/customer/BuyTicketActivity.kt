@@ -7,6 +7,7 @@ import com.mp3.experiments.R
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.databinding.ActivityBuyTicketBinding
+import com.mp3.experiments.ui.fragments.PaymentDialogFragment
 
 class BuyTicketActivity : AppCompatActivity() {
 
@@ -69,9 +70,18 @@ class BuyTicketActivity : AppCompatActivity() {
         val formattedTotalPrice = String.format("%.2f", totalPrice)
 
         binding.tvTotalPrice.text = formattedTotalPrice
+
+        binding.btnConfirmSeats.setOnClickListener{
+            showDialog()
+        }
     }
 
     fun calculate_ticketPrice(seatSelected_count : Int, moviePrice : Double){
         totalPrice = seatSelected_count * moviePrice
+    }
+
+    fun showDialog() {
+        val dialogFragment = PaymentDialogFragment()
+        dialogFragment.show(supportFragmentManager, PaymentDialogFragment::class.java.simpleName)
     }
 }

@@ -135,13 +135,15 @@
 
     </ScrollView>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_addMovie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/red_400"
-        android:text="Add Movie"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:background="@drawable/squircle"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"
+        android:text="Add movie"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
