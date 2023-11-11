@@ -46,31 +46,43 @@
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:rowCount="3"
             android:columnCount="2">
 
             <Button
                 android:id="@+id/btn_addCinema"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
                 android:backgroundTint="@color/red_400"
-                android:text="Add Cinema"/>
+                android:text="Add Cinema"
+                android:layout_margin="5dp"/>
 
             <Button
                 android:id="@+id/btn_editCinema"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
                 android:backgroundTint="@color/red_400"
                 android:text="Edit Cinema"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_margin="5dp"/>
+
+            <Button
+                android:id="@+id/btn_editTheatre"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:backgroundTint="@color/red_400"
+                android:text="Edit Theatre"
+                android:layout_margin="5dp"/>
 
             <Button
                 android:id="@+id/btn_deleteCinema"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
                 android:backgroundTint="@color/red_800"
-                android:text="Delete Cinema"/>
+                android:text="Delete Cinema"
+                android:layout_margin="5dp"/>
         </GridLayout>
 
         <ImageButton
