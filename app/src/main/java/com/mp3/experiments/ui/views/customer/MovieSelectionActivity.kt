@@ -13,6 +13,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.mp3.experiments.R
 import com.mp3.experiments.data.interfaces.LoopCompleteCallbackInterface
 import com.mp3.experiments.data.model.CinemaModel
+import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.ActivityMovieSelectionBinding
 
@@ -47,13 +48,13 @@ class MovieSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterfac
 
         binding.btnSelectMovie.setOnClickListener {
             if (cinemaLocation != null && cinemaName != null) {
+
                 viewModel.checkIfTimeslotExists(
                     cinemaLocation,
                     cinemaName,
                     binding.inputTheatreNumber.text.toString().toInt(),
                     binding.inputTimeslot.text.toString()
-                )
-                    .addOnSuccessListener { exists ->
+                    ).addOnSuccessListener { exists ->
                         if (exists) {
                             val time = binding.inputTimeslot.text.toString()
 
@@ -164,7 +165,8 @@ class MovieSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterfac
         bundle.putSerializable("seatOccupied", seatOccupied)
         intent.putExtra("matrixBundle", bundle)
         intent.putExtra("cinemaModel", cinemaModel)
-        intent.putExtra("theatreNumber", binding.inputTheatreNumber.text.toString())
+        intent.putExtra("theatreNumber", binding.inputTheatreNumber.text.toString().toInt())
+        intent.putExtra("timeslot", binding.inputTimeslot.text.toString())
         startActivity(intent)
     }
 

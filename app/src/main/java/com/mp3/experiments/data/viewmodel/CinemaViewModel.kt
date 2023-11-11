@@ -128,19 +128,20 @@ class CinemaViewModel : ViewModel() {
             .child("Lowerbox")
             .child("A/1")
             .child("seat_movie_timeslot")
-            .orderByChild("time")
-            .equalTo(time)
 
         Log.d("test12", "$timeslotRef")
 
         return timeslotRef.get().continueWith { task ->
             if (task.isSuccessful) {
                 val dataSnapshot = task.result
-                if (dataSnapshot.hasChildren()) {
-                    val timeslotValue = dataSnapshot.value
-                    Log.d("test12", "Timeslot value: $timeslotValue")
+
+                for (timeslotSnapshot in dataSnapshot.children) {
+                    val timeslot = timeslotSnapshot.getValue(SeatTimeslotModel::class.java)
+                    if (timeslot?.time == time) {
+                        return@continueWith true
+                    }
                 }
-                dataSnapshot.hasChildren()
+                false
             } else {
                 Log.e("test12", "Error getting timeslot", task.exception)
                 false
@@ -177,6 +178,29 @@ class CinemaViewModel : ViewModel() {
                 false
             }
         }
+    }
+
+    fun getMovieDetails(cinemaLocation: String, cinemaName: String, theatreNumber: Int, callback: (TheatreMovieModel?) -> Unit) {
+        val theatreMovieDetailsRef = firebase_database
+            .child(NODE_CINEMA)
+            .child(cinemaLocation)
+            .child(cinemaName)
+            .child("Theatre$theatreNumber")
+            .child(NODE_MOVIE_DETAILS)
+
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val movieData = dataSnapshot.getValue<TheatreMovieModel>()
+                callback(movieData)
+                Log.d("test123", "fun success")
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback(null)
+                Log.d("test123", "fun cancelled: $databaseError")
+            }
+        }
+        theatreMovieDetailsRef.addValueEventListener(valueEventListener)
     }
 
     fun getCinemaDetails(cinemaLocation: String, cinemaName: String, callback: (CinemaModel?) -> Unit) {

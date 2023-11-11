@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.mp3.experiments.R
 import com.mp3.experiments.data.interfaces.LoopCompleteCallbackInterface
 import com.mp3.experiments.data.model.CinemaModel
+import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.ActivitySeatSelectionBinding
 
@@ -27,7 +28,7 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
     var numRows = upper_length+middle_length+lower_length
     var numColumns = upper_width+middle_width+lower_width
 
-    var theatreNumber = ""
+    var theatreNumber = 0
 
     var seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
     var seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
@@ -36,7 +37,9 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
     private lateinit var cinemaModel : CinemaModel
 
     private var seatSelected_count = 0
+    private var time = ""
 
+    private lateinit var theatreMovieModel : TheatreMovieModel
     private lateinit var binding : ActivitySeatSelectionBinding
     private lateinit var viewModel : CinemaViewModel
 
@@ -47,12 +50,13 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
 
         viewModel = CinemaViewModel()
 
-        theatreNumber = intent.getStringExtra("theatreNumber")!!
+        theatreNumber = intent.getIntExtra("theatreNumber", 0)
         cinemaModel = intent.getParcelableExtra<CinemaModel>("cinemaModel")!!
+        time = intent.getStringExtra("timeslot")!!
         val receivedBundle = intent.getBundleExtra("matrixBundle")
         val receivedMatrix = receivedBundle?.getSerializable("seatOccupied") as? Array<BooleanArray>
 
-        upper_length = cinemaModel?.cinema_upperbox_length!!
+        upper_length = cinemaModel.cinema_upperbox_length!!
         middle_length = cinemaModel.cinema_middlebox_length!!
         lower_length = cinemaModel.cinema_lowerbox_length!!
 
@@ -71,7 +75,6 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
 
         if (receivedMatrix != null) {
             seatOccupied = receivedMatrix
-        } else {
         }
 
         Log.d("test123", "$numRows")
@@ -92,15 +95,19 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
         binding.btnBuyTicket.setOnClickListener {
             seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
 
-            for (row in 0 until numRows) {
-                for (col in 0 until numColumns) {
-                    if (seatStatus[row][col]) {
-                        seatSelected[row][col] = true
+            viewModel.getMovieDetails(cinemaModel.cinema_location!!, cinemaModel.cinema_name!!, theatreNumber) {movieModel ->
+                theatreMovieModel = movieModel!!
 
-                    }
-                    if (row == numRows - 1 && col == numColumns - 1) {
-                        seatSelected = reverseRows(seatSelected)
-                        onLoopCompleted()
+                for (row in 0 until numRows) {
+                    for (col in 0 until numColumns) {
+                        if (seatStatus[row][col]) {
+                            seatSelected[row][col] = true
+
+                        }
+                        if (row == numRows - 1 && col == numColumns - 1) {
+                            seatSelected = reverseRows(seatSelected)
+                            onLoopCompleted()
+                        }
                     }
                 }
             }
@@ -214,8 +221,10 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
         bundle.putSerializable("seatSelected", seatSelected)
         intent.putExtra("matrixBundle", bundle)
         intent.putExtra("cinemaModel", cinemaModel )
+        intent.putExtra("theatreMovieModel", theatreMovieModel)
         intent.putExtra("theatreNumber", theatreNumber)
         intent.putExtra("seatSelected_count", seatSelected_count)
+        intent.putExtra("timeslot", time)
         startActivity(intent)
         overridePendingTransition(0, 0)
     }
