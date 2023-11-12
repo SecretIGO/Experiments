@@ -2,8 +2,6 @@ package com.mp3.experiments.ui.views.customer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import com.mp3.experiments.R
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.databinding.ActivityBuyTicketBinding
@@ -44,7 +42,7 @@ class BuyTicketActivity : AppCompatActivity() {
 
         for (row in 0 until numRows) {
             for (col in 0 until numColumns) {
-                if (seatSelected[row][col] == true) {
+                if (seatSelected[row][col]) {
                     var tempStr = binding.tvSeatSelected.text.toString()
 
                     if (tempStr == "n/a")
@@ -71,7 +69,13 @@ class BuyTicketActivity : AppCompatActivity() {
         binding.tvTotalPrice.text = formattedTotalPrice
 
         binding.btnConfirmSeats.setOnClickListener{
-            showDialog()
+            showDialog(
+                theatreNumber,
+                seatSelected_count,
+                cinemaModel,
+                theatreMovieModel,
+                time
+            )
         }
     }
 
@@ -79,8 +83,25 @@ class BuyTicketActivity : AppCompatActivity() {
         totalPrice = seatSelected_count * moviePrice
     }
 
-    fun showDialog() {
-        val dialogFragment = PaymentDialogFragment.newInstance(totalPrice)
+    fun showDialog(
+        theatreNumber: Int,
+        seatSelectedCount: Int,
+        cinemaModel: CinemaModel,
+        theatreMovieModel: TheatreMovieModel,
+        timeslot: String
+        ) {
+
+        val bundle = Bundle()
+        bundle.putSerializable("seatSelected", seatSelected)
+
+        val dialogFragment = PaymentDialogFragment.newInstance(
+            totalPrice,
+            theatreNumber,
+            seatSelectedCount,
+            cinemaModel,
+            theatreMovieModel,
+            bundle,
+            timeslot)
         dialogFragment.show(supportFragmentManager, PaymentDialogFragment::class.java.simpleName)
     }
 }

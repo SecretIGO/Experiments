@@ -79,6 +79,95 @@ class CinemaViewModel : ViewModel() {
         seatOccupancyRef.addValueEventListener(valueEventListener)
     }
 
+    fun checkIfSeat_isOccupied(
+        seatSelected : Array<BooleanArray>,
+        cinemaLocation: String,
+        cinemaName: String,
+        theatreNumber: Int,
+        lowerbox_length: Int,
+        middlebox_length: Int,
+        row: Int,
+        col: Int,
+        showtime: String
+        ) : Task<Boolean> {
+
+        val section =
+            if (row < lowerbox_length) NODE_LOWERBOX
+            else if (row < lowerbox_length + middlebox_length) NODE_MIDDLEBOX
+            else NODE_UPPERBOX
+
+        val timeslotRef = firebase_database
+            .child(NODE_CINEMA)
+            .child(cinemaLocation)
+            .child(cinemaName)
+            .child("Theatre$theatreNumber")
+            .child(NODE_SEATS)
+            .child(section)
+            .child("${(64 + row + 1).toChar()}")
+            .child("${col + 1}")
+            .child(NODE_MOVIE_TIMESLOT)
+            .orderByChild("time")
+            .equalTo(showtime)
+
+        return timeslotRef.get().continueWith { task ->
+            if (task.isSuccessful) {
+                val dataSnapshot = task.result
+
+                for (timeslotSnapshot in dataSnapshot.children) {
+                    val timeslot = timeslotSnapshot.getValue(SeatTimeslotModel::class.java)
+                    if (timeslot?.occupied == true && seatSelected[row][col]){
+                        return@continueWith true
+                    }
+                }
+                false
+            } else {
+                Log.e("test12", "Error getting timeslot", task.exception)
+                false
+            }
+        }
+    }
+
+    fun updateSeatOccupied(
+        cinemaLocation: String,
+        cinemaName: String,
+        theatreNumber: Int,
+        lowerbox_length: Int,
+        middlebox_length: Int,
+        row: Int,
+        col: Int,
+        showtime: String
+    ) {
+        val section =
+            if (row < lowerbox_length) NODE_LOWERBOX
+            else if (row < lowerbox_length + middlebox_length) NODE_MIDDLEBOX
+            else NODE_UPPERBOX
+
+        val timeslotRef = firebase_database
+            .child(NODE_CINEMA)
+            .child(cinemaLocation)
+            .child(cinemaName)
+            .child("Theatre$theatreNumber")
+            .child(NODE_SEATS)
+            .child(section)
+            .child("${(64 + row + 1).toChar()}")
+            .child("${col + 1}")
+            .child(NODE_MOVIE_TIMESLOT)
+            .orderByChild("time")
+            .equalTo(showtime)
+
+        timeslotRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (timeslotSnapshot in snapshot.children) {
+                    timeslotSnapshot.ref.child("occupied").setValue(true)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("test123", "Error Updating Seat : $error")
+            }
+        })
+    }
+
     fun getMovieTimeslots(cinemaLocation: String, cinemaName: String, theatreNumber: Int, callback: (List<SeatTimeslotModel?>) -> Unit){
         val timeslotRef = firebase_database
             .child(NODE_CINEMA)

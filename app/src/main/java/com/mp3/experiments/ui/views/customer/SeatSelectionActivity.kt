@@ -76,6 +76,7 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
 
         binding.tvMovieName.text = theatreMovieModel.movie_name
         binding.tvTheatreNumber.text = "Theatre$theatreNumber"
+        binding.tvTimeslot.text = time
 
         if (receivedMatrix != null) {
             seatOccupied = receivedMatrix
@@ -97,19 +98,23 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
         }
 
         binding.btnBuyTicket.setOnClickListener {
-            seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
+            if (seatSelected_count != 0){
+                seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
 
-            for (row in 0 until numRows) {
-                for (col in 0 until numColumns) {
-                    if (seatStatus[row][col]) {
-                        seatSelected[row][col] = true
+                for (row in 0 until numRows) {
+                    for (col in 0 until numColumns) {
+                        if (seatStatus[row][col]) {
+                            seatSelected[row][col] = true
 
-                    }
-                    if (row == numRows - 1 && col == numColumns - 1) {
-                        seatSelected = reverseRows(seatSelected)
-                        onLoopCompleted()
+                        }
+                        if (row == numRows - 1 && col == numColumns - 1) {
+                            seatSelected = reverseRows(seatSelected)
+                            onLoopCompleted()
+                        }
                     }
                 }
+            } else {
+                Toast.makeText(this, "You can't buy the air you know!", Toast.LENGTH_SHORT).show()
             }
         }
     }
