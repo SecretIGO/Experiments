@@ -52,6 +52,7 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
 
         theatreNumber = intent.getIntExtra("theatreNumber", 0)
         cinemaModel = intent.getParcelableExtra<CinemaModel>("cinemaModel")!!
+        theatreMovieModel = intent.getParcelableExtra<TheatreMovieModel>("theatreMovieModel")!!
         time = intent.getStringExtra("timeslot")!!
         val receivedBundle = intent.getBundleExtra("matrixBundle")
         val receivedMatrix = receivedBundle?.getSerializable("seatOccupied") as? Array<BooleanArray>
@@ -72,6 +73,9 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
 
         seatStatus = Array(numRows) { BooleanArray(numColumns) { false } }
         seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
+
+        binding.tvMovieName.text = theatreMovieModel.movie_name
+        binding.tvTheatreNumber.text = "Theatre$theatreNumber"
 
         if (receivedMatrix != null) {
             seatOccupied = receivedMatrix
@@ -95,19 +99,15 @@ class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface
         binding.btnBuyTicket.setOnClickListener {
             seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
 
-            viewModel.getMovieDetails(cinemaModel.cinema_location!!, cinemaModel.cinema_name!!, theatreNumber) {movieModel ->
-                theatreMovieModel = movieModel!!
+            for (row in 0 until numRows) {
+                for (col in 0 until numColumns) {
+                    if (seatStatus[row][col]) {
+                        seatSelected[row][col] = true
 
-                for (row in 0 until numRows) {
-                    for (col in 0 until numColumns) {
-                        if (seatStatus[row][col]) {
-                            seatSelected[row][col] = true
-
-                        }
-                        if (row == numRows - 1 && col == numColumns - 1) {
-                            seatSelected = reverseRows(seatSelected)
-                            onLoopCompleted()
-                        }
+                    }
+                    if (row == numRows - 1 && col == numColumns - 1) {
+                        seatSelected = reverseRows(seatSelected)
+                        onLoopCompleted()
                     }
                 }
             }

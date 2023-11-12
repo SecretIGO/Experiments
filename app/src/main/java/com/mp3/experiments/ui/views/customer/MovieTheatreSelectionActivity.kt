@@ -13,8 +13,6 @@ class MovieTheatreSelectionActivity : AppCompatActivity() {
     var numRows = 0
     var numColumns = 0
 
-    var seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
-
     private lateinit var binding : ActivityMovieTheatreSelectionBinding
     private lateinit var viewModel : CinemaViewModel
     override fun onCreate(savedInstanceState: Bundle?) {

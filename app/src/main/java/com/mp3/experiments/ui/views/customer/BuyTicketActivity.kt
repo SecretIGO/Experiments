@@ -14,7 +14,6 @@ class BuyTicketActivity : AppCompatActivity() {
     var numRows = 0
     var numColumns = 0
 
-    var ticketPrice = 100
     var totalPrice = 0.0
 
     var seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
@@ -81,7 +80,7 @@ class BuyTicketActivity : AppCompatActivity() {
     }
 
     fun showDialog() {
-        val dialogFragment = PaymentDialogFragment()
+        val dialogFragment = PaymentDialogFragment.newInstance(totalPrice)
         dialogFragment.show(supportFragmentManager, PaymentDialogFragment::class.java.simpleName)
     }
 }

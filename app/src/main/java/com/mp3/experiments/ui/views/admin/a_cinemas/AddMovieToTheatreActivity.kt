@@ -1,5 +1,6 @@
 package com.mp3.experiments.ui.views.admin.a_cinemas
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -22,6 +23,7 @@ import com.mp3.experiments.data.model.MovieModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.data.viewmodel.MovieViewModel
 import com.mp3.experiments.databinding.ActivityAddMovieToTheatreBinding
+import com.mp3.experiments.ui.views.admin.AdminActivity
 
 class AddMovieToTheatreActivity : AppCompatActivity(), LoopCompleteCallbackInterface {
 
@@ -71,6 +73,9 @@ class AddMovieToTheatreActivity : AppCompatActivity(), LoopCompleteCallbackInter
                                                 binding.inputTheatreNumber.text.toString().toInt(),
                                                 cinemaDetails,
                                                 values)
+
+                                            Toast.makeText(this, "Added Movie to Theatre!", Toast.LENGTH_SHORT).show()
+                                            startActivity(Intent(this, AdminActivity::class.java))
                                         } else {
                                             Toast.makeText(this, "Movie Does not exist!", Toast.LENGTH_SHORT).show()
                                         }

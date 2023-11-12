@@ -1,10 +1,12 @@
 package com.mp3.experiments.ui.views.admin.a_cinemas
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.ActivityAddCinemaBinding
+import com.mp3.experiments.ui.views.admin.AdminActivity
 
 class AddCinemaActivity : AppCompatActivity() {
     private lateinit var binding : ActivityAddCinemaBinding
@@ -39,6 +41,8 @@ class AddCinemaActivity : AppCompatActivity() {
                         binding.inputMiddleLength.text.toString().toInt(),
                         binding.inputUpperLength.text.toString().toInt()
                     )
+                    Toast.makeText(this, "Added Cinema to Database", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, AdminActivity::class.java))
                 }
             }
         }

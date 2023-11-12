@@ -1,6 +1,7 @@
 package com.mp3.experiments.ui.views.admin.a_movies
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.widget.DatePicker
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mp3.experiments.data.model.MovieModel
 import com.mp3.experiments.data.viewmodel.MovieViewModel
 import com.mp3.experiments.databinding.ActivityAddMovieBinding
+import com.mp3.experiments.ui.views.admin.AdminActivity
 import java.util.Calendar
 
 
@@ -49,6 +51,8 @@ class AddMovieActivity : AppCompatActivity() {
                         ""
                     )
                     viewModel.createMovie_toDatabase(movie)
+                    Toast.makeText(this, "Added movie to database!", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, AdminActivity::class.java))
                 }
 
             }

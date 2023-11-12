@@ -34,6 +34,7 @@ class MovieSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterfac
     private lateinit var cinemaModel: CinemaModel
     private lateinit var binding: ActivityMovieSelectionBinding
     private lateinit var viewModel: CinemaViewModel
+    private lateinit var theatreMovieModel : TheatreMovieModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,8 +97,12 @@ class MovieSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterfac
 //                                                Log.d("test123", "${(64 + row + 1).toChar()}${col + 1} : ${seatOccupied[row][col]}")
 
                                                     if (row == numRows - 1 && col == numColumns - 1) {
-                                                        seatOccupied = reverseRows(seatOccupied)
-                                                        onLoopCompleted()
+
+                                                        viewModel.getMovieDetails(cinemaModel.cinema_location!!, cinemaModel.cinema_name!!, binding.inputTheatreNumber.text.toString().toInt()) {movieModel ->
+                                                            theatreMovieModel = movieModel!!
+                                                            seatOccupied = reverseRows(seatOccupied)
+                                                            onLoopCompleted()
+                                                        }
                                                     }
                                                 } else {
                                                     Log.d("ntest", "seatData is null")
@@ -165,6 +170,7 @@ class MovieSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterfac
         bundle.putSerializable("seatOccupied", seatOccupied)
         intent.putExtra("matrixBundle", bundle)
         intent.putExtra("cinemaModel", cinemaModel)
+        intent.putExtra("theatreMovieModel", theatreMovieModel)
         intent.putExtra("theatreNumber", binding.inputTheatreNumber.text.toString().toInt())
         intent.putExtra("timeslot", binding.inputTimeslot.text.toString())
         startActivity(intent)
