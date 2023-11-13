@@ -25,7 +25,7 @@ import com.mp3.experiments.data.viewmodel.MovieViewModel
 import com.mp3.experiments.databinding.ActivityAddMovieToTheatreBinding
 import com.mp3.experiments.ui.views.admin.AdminActivity
 
-class AddMovieToTheatreActivity : AppCompatActivity(), LoopCompleteCallbackInterface {
+class AddMovieToTheatreActivity : AppCompatActivity() {
 
     private val idViewMap = HashMap<String, TextInputEditText>()
 
@@ -196,9 +196,5 @@ class AddMovieToTheatreActivity : AppCompatActivity(), LoopCompleteCallbackInter
         }
 
         return inputValues
-    }
-
-    override fun onLoopCompleted() {
-        TODO("Not yet implemented")
     }
 }
