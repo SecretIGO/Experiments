@@ -13,4 +13,5 @@
     <color name="green">#00FF00</color>
 
     <color name="clear">#00FF0000</color>
+    <color name="clear_50">#80FFFFFF</color>
 </resources>

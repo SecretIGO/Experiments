@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -29,6 +30,9 @@ import com.mp3.experiments.data.nodes.NODE_UPPERBOX
 
 class CinemaViewModel : ViewModel() {
     private val firebase_database = Firebase.database.reference
+
+    private val _cinemaList = MutableLiveData<List<CinemaModel>>()
+    val cinemaList: LiveData<List<CinemaModel>> get() = _cinemaList
 
     fun getSeatOccupied(
         row: Int,
@@ -381,5 +385,62 @@ class CinemaViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun observeCinemas() {
+        val cinemasRef = firebase_database.child(NODE_CINEMA)
+
+        val cinemasListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val cinemasList: MutableList<CinemaModel> = mutableListOf()
+
+                for (locationSnapshot in dataSnapshot.children) {
+                    val location = locationSnapshot.key
+                    Log.d("test123", "$location")
+                    for (cinemaSnapshot in locationSnapshot.children) {
+                        val cinemaName = cinemaSnapshot.key
+                        Log.d("test123", "$cinemaName")
+
+                        val cinemaDetailsSnapshot = cinemaSnapshot.child("cinemaDetails")
+                        val cinemaCapacity = cinemaDetailsSnapshot.child("cinema_capacity").value?.toString()
+                        val cinemaUpperboxLength = cinemaDetailsSnapshot.child("cinema_upperbox_length").value?.toString()
+                        val cinemaMiddleboxLength = cinemaDetailsSnapshot.child("cinema_middlebox_length").value?.toString()
+                        val cinemaLowerboxLength = cinemaDetailsSnapshot.child("cinema_lowerbox_length").value?.toString()
+                        val cinemaUpperboxWidth = cinemaDetailsSnapshot.child("cinema_upperbox_width").value?.toString()
+                        val cinemaMiddleboxWidth = cinemaDetailsSnapshot.child("cinema_middlebox_width").value?.toString()
+                        val cinemaLowerboxWidth = cinemaDetailsSnapshot.child("cinema_lowerbox_width").value?.toString()
+                        val cinemaLogo = cinemaDetailsSnapshot.child("cinema_logo").value?.toString()
+
+                        val cinemaModel = CinemaModel(
+                            cinema_location = location,
+                            cinema_name = cinemaName,
+                            cinema_capacity = cinemaCapacity?.toInt(),
+                            cinema_upperbox_length = cinemaUpperboxLength?.toInt(),
+                            cinema_middlebox_length = cinemaMiddleboxLength?.toInt(),
+                            cinema_lowerbox_length = cinemaLowerboxLength?.toInt(),
+                            cinema_upperbox_width = cinemaUpperboxWidth?.toInt(),
+                            cinema_middlebox_width = cinemaMiddleboxWidth?.toInt(),
+                            cinema_lowerbox_width = cinemaLowerboxWidth?.toInt(),
+                            cinema_logo = cinemaLogo
+                        )
+
+                        cinemasList.add(cinemaModel)
+                    }
+                }
+                Log.d("test123", "${cinemasList[0].cinema_name}")
+                for (cinema in cinemasList){
+                    Log.d("CinemaObserver", "Location: ${cinema.cinema_location}, Cinema Name: ${cinema.cinema_name}, Capacity: ${cinema.cinema_capacity}")
+                }
+
+                _cinemaList.value = cinemasList
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors if necessary
+                Log.e("CinemaObserver", "Error loading cinemas: ${databaseError.message}")
+            }
+        }
+
+        cinemasRef.addValueEventListener(cinemasListener)
     }
 }
