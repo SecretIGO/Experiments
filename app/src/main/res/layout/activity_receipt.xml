@@ -34,14 +34,14 @@
                 />
 
             <TextView
-                android:id="@+id/tv_"
+                android:id="@+id/tv_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="hello"
                 />
 
             <TextView
-                android:id="@+id/tv_"
+                android:id="@+id/tv_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="hello"

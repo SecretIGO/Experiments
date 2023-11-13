@@ -52,9 +52,9 @@ class HomeActivity : AppCompatActivity() {
 
         imageSlider.setTouchListener(object : TouchListener {
             override fun onTouched(touched: ActionTypes, position: Int) {
-                if (touched == ActionTypes.DOWN){
+                if (touched == ActionTypes.DOWN) {
                     imageSlider.stopSliding()
-                } else if (touched == ActionTypes.UP ) {
+                } else if (touched == ActionTypes.UP) {
                     imageSlider.startSliding(5000)
                 }
             }
