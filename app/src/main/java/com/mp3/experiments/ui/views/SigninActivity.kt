@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.mp3.experiments.R
 import com.mp3.experiments.databinding.ActivitySigninBinding
 import com.mp3.experiments.ui.views.admin.AdminActivity
+import com.mp3.experiments.ui.views.customer.HomeActivity
 import com.mp3.experiments.ui.views.customer.MovieTheatreSelectionActivity
 import com.mp3.experiments.ui.views.customer.SeatSelectionActivity
 
@@ -21,7 +22,7 @@ class SigninActivity : AppCompatActivity() {
             if (binding.inputEmail.text.toString() == "admin"){
                 startActivity(Intent(this, AdminActivity::class.java))
             } else {
-                startActivity(Intent(this, MovieTheatreSelectionActivity::class.java))
+                startActivity(Intent(this, HomeActivity::class.java))
             }
 
         }
