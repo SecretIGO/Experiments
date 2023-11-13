@@ -14,6 +14,9 @@
         android:theme="@style/Theme.Experiments"
         tools:targetApi="31">
         <activity
+            android:name=".ui.views.customer.ReceiptActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.views.admin.a_cinemas.AddMovieToTheatreActivity"
             android:exported="false" />
         <activity

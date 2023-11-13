@@ -15,7 +15,7 @@ import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.ActivitySeatSelectionBinding
 
-class SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface {
+class   SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterface {
 
     private var upper_length = 0
     private var middle_length = 0
