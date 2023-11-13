@@ -19,12 +19,13 @@
             android:padding="20dp"
             android:orientation="vertical">
 
+
+            <!-- this is a broken -->
             <TextView
-                android:id="@+id/tv_movieName"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="hello"
-                />
+                android:background="@drawable/broken_lines"/>
 
             <TextView
                 android:id="@+id/tv_movie"
@@ -34,14 +35,14 @@
                 />
 
             <TextView
-                android:id="@+id/tv_"
+                android:id="@+id/tv_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="hello"
                 />
 
             <TextView
-                android:id="@+id/tv_"
+                android:id="@+id/tv_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="hello"

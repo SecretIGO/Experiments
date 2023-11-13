@@ -1,5 +1,6 @@
 package com.mp3.experiments.ui.fragments
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.FragmentPaymentDialogBinding
+import com.mp3.experiments.ui.views.customer.ReceiptActivity
 import java.util.Locale
 
 class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackInterface {
@@ -176,6 +178,8 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
                         col,
                         timeslot)
                     Toast.makeText(requireContext(), "${(64 + row + 1).toChar()}${col+1} is selected", Toast.LENGTH_SHORT).show()
+
+                    startActivity(Intent(requireContext(), ReceiptActivity::class.java))
                 }
             }
         }
