@@ -167,6 +167,7 @@ class MovieSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterfac
         // Start the new activity here
         val intent = Intent(this, SeatSelectionActivity::class.java)
         val bundle = Bundle()
+        //a
         bundle.putSerializable("seatOccupied", seatOccupied)
         intent.putExtra("matrixBundle", bundle)
         intent.putExtra("cinemaModel", cinemaModel)
