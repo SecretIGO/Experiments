@@ -22,36 +22,7 @@ class MovieTheatreSelectionActivity : AppCompatActivity() {
 
         viewModel = CinemaViewModel()
 
-        binding.btnSelectCinema.setOnClickListener {
-            if (checkIfInput_isEmpty()){
-                Toast.makeText(this, "Not valid!", Toast.LENGTH_SHORT).show()
-            } else {
-                viewModel.checkIfCinemaExists(
 
-                binding.inputCinemaLocation.text.toString(),
-                binding.inputCinemaName.text.toString())
-
-                .addOnSuccessListener { exists ->
-                    if (exists) {
-                        val intent = Intent(this, MovieSelectionActivity::class.java)
-                        intent.putExtra("cinemaLocation", binding.inputCinemaLocation.text.toString())
-                        intent.putExtra("cinemaName", binding.inputCinemaName.text.toString())
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this, "Cinema : ${binding.inputCinemaName.text.toString()}\nLocation : ${binding.inputCinemaLocation.text.toString()}\nDoes Not Exist!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
+    }
     }
 
-    private fun checkIfInput_isEmpty() : Boolean{
-        if (binding.inputCinemaLocation.text!!.isEmpty()){
-            return true
-        }
-        if (binding.inputCinemaName.text!!.isEmpty()){
-            return true
-        }
-        return false
-    }
-}
