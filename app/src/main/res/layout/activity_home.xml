@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.views.customer.HomeActivity">
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> origin/master
 </androidx.constraintlayout.widget.ConstraintLayout>
