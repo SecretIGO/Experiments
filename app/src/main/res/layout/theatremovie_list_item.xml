@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/item_movieItem"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="0dp"
         android:layout_marginBottom="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="3">
+            android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/iv_movie_banner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/sample_movie_banner"
-                android:scaleType="centerCrop"/>
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:src="@drawable/download"
+                android:scaleType="fitCenter"/>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -34,79 +36,64 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_movieName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Movie Name" />
+                        android:text="Placeholder Movie Name just to check if horizontal scroll view works"
+                        android:textSize="20sp"
+                        android:singleLine="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:scrollHorizontally="true"/>
 
-                    <com.google.android.material.card.MaterialCardView
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <HorizontalScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/tv_cinemaLocation"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="This is a long ass movie name like those of japanese anime titles that doesn't really make sense but it is so long that they make it a short title anyways." />
-
-                        </HorizontalScrollView>
-
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Movie Price" />
-
-                    <com.google.android.material.card.MaterialCardView
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="@string/peso_sign" />
-
-                            <TextView
-                                android:id="@+id/tv_cinemaName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="100" />
-                        </LinearLayout>
-
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Timeslots" />
-
-                    <com.google.android.material.card.MaterialCardView
-
-                        android:layout_width="match_parent"
-                        android:layout_height="75dp">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="Timeslot1\nTimeslot2\nTimeslot3\nTimeslot4" />
+                            android:text="@string/peso_sign" />
 
-                    </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:id="@+id/tv_moviePrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_theatreNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Theatre1" />
+
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="10dp"
+                        android:background="@color/red_400" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Timeslot"/>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Spinner
+                            android:id="@+id/spinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </androidx.cardview.widget.CardView>
+
+
 
 
                 </LinearLayout>

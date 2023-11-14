@@ -18,6 +18,8 @@ import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.FragmentPaymentDialogBinding
 import com.mp3.experiments.ui.views.customer.ReceiptActivity
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackInterface {
@@ -107,6 +109,7 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
                                     if (isValid) {
                                         Toast.makeText(requireContext(), "All selected seats are not occupied", Toast.LENGTH_SHORT).show()
                                         onLoopCompleted()
+
                                     } else {
                                         if (seatSelectedCount == 1) {
                                             Toast.makeText(requireContext(), "Your selected seat might be taken by another user!", Toast.LENGTH_SHORT).show()
@@ -179,9 +182,29 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
                         timeslot)
                     Toast.makeText(requireContext(), "${(64 + row + 1).toChar()}${col+1} is selected", Toast.LENGTH_SHORT).show()
 
-                    startActivity(Intent(requireContext(), ReceiptActivity::class.java))
+                    val currentDateTime = getCurrentDateTime()
+                    val intent = Intent(requireContext(), ReceiptActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+
+                    val bundle = Bundle()
+                    bundle.putSerializable("seatSelected", seatSelected)
+                    intent.putExtra("matrixBundle", bundle)
+                    intent.putExtra("cinemaModel", cinemaModel)
+                    intent.putExtra("theatreMovieModel", theatreMovieModel)
+                    intent.putExtra("theatreNumber", theatreNumber)
+                    intent.putExtra("timeslot", timeslot)
+                    intent.putExtra("totalAmount", totalPrice)
+                    intent.putExtra("datetime", currentDateTime)
+
+                    startActivity(intent)
                 }
             }
         }
+    }
+
+    fun getCurrentDateTime(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy, hh:mm a", Locale.getDefault())
+        return dateFormat.format(calendar.time)
     }
 }
