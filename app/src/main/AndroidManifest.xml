@@ -14,6 +14,9 @@
         android:theme="@style/Theme.Experiments"
         tools:targetApi="31">
         <activity
+            android:name=".ui.views.customer.user.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.views.customer.HomeActivity"
             android:exported="false" />
         <activity

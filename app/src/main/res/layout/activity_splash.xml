@@ -5,17 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.views.SplashActivity"
-    android:background="@color/red_800"
+    android:background="@color/red_400"
     >
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="293dp"
-        android:layout_height="298dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/filmflick_logo" />
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="290dp"
+            android:layout_height="290dp"
+            app:srcCompat="@drawable/filmflick_logo"
+            />
+    </androidx.cardview.widget.CardView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
