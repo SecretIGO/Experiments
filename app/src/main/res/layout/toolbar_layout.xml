@@ -27,12 +27,46 @@
 
             <TextView
                 android:id="@+id/tv_toolbarTitle"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Menu?"
                 android:textColor="@color/red_400"
                 android:padding="10dp"
                 android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="10dp">
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SecretIGO"
+                android:layout_gravity="center_vertical"
+                />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="250dp"
+                android:layout_marginStart="10dp">
+
+                <ImageView
+                    android:id="@+id/iv_userProfile"
+                    android:layout_width="25sp"
+                    android:layout_height="25sp"
+                    android:src="@drawable/robinsons_logo"/>
+
+            </androidx.cardview.widget.CardView>
+
+
+
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

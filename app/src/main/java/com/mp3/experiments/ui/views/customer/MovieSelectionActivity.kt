@@ -22,6 +22,7 @@ import com.mp3.experiments.databinding.ActivityMovieSelectionBinding
 import com.mp3.experiments.databinding.ToolbarLayoutBinding
 import com.mp3.experiments.ui.adapters.CinemaAdapter
 import com.mp3.experiments.ui.adapters.TheatreMoviesAdapter
+import com.mp3.experiments.ui.views.customer.user.ProfileActivity
 
 class MovieSelectionActivity : AppCompatActivity() {
 
@@ -39,6 +40,9 @@ class MovieSelectionActivity : AppCompatActivity() {
         toolbar.tvToolbarTitle.setText(R.string.movie_selection)
         toolbar.btnBack.setOnClickListener{
             finish()
+        }
+        toolbar.llUsername.setOnClickListener{
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
 
         viewModel = CinemaViewModel()

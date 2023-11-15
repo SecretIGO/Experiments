@@ -45,6 +45,29 @@
         android:gravity="center"
         android:text="Timeslot"/>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/red_400">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp">
+
+            <TextView
+                android:id="@+id/tv_movieName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This is a super long long long long movie name like you know, anime titles that doesn't really matter that much"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"/>
+
+        </HorizontalScrollView>
+    </androidx.cardview.widget.CardView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,23 +111,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"/>
-
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-
-            <TextView
-                android:id="@+id/tv_movieName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="This is a super long long long long movie name like you know, anime titles that doesn't really matter that much"
-                android:textColor="@color/red_400"
-                android:textSize="18sp"/>
-        </HorizontalScrollView>
-
-
 
         <LinearLayout
             android:layout_width="wrap_content"

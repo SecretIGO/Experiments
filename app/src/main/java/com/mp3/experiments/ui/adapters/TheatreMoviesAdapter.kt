@@ -170,11 +170,8 @@ class TheatreMoviesAdapter (
                                                 lower_length,
                                                 middle_length
                                             ) { seatData ->
-
                                                 if (seatData != null) {
                                                     seatOccupied[row][col] = seatData.occupied!!
-                                                    //                                               Log.d("test123", "${(64 + row + 1).toChar()}${col + 1} : ${seatOccupied[row][col]}")
-
                                                     if (row == numRows - 1 && col == numColumns - 1) {
 
                                                         viewModel.getMovieDetails(cinemaModel.cinema_location!!, cinemaModel.cinema_name!!, position+1) {movieModel ->
@@ -205,7 +202,7 @@ class TheatreMoviesAdapter (
             }
         }
 
-        fun onLoopCompleted() {
+        private fun onLoopCompleted() {
             // Start the new activity here
             val intent = Intent(context, SeatSelectionActivity::class.java)
             val bundle = Bundle()
@@ -218,7 +215,7 @@ class TheatreMoviesAdapter (
             context.startActivity(intent)
         }
 
-        fun reverseRows(array: Array<BooleanArray>): Array<BooleanArray> {
+        private fun reverseRows(array: Array<BooleanArray>): Array<BooleanArray> {
             val numRows = array.size
             val reversedArray = Array(numRows) { BooleanArray(array[0].size) }
             for (i in 0 until numRows) {
