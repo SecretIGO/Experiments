@@ -17,6 +17,8 @@ class SigninActivity : AppCompatActivity() {
         binding = ActivitySigninBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // work in progress
+
         binding.btnLogin.setOnClickListener{
             if (binding.inputEmail.text.toString() == "admin"){
                 startActivity(Intent(this, AdminActivity::class.java))
