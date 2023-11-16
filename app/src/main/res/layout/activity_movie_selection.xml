@@ -11,10 +11,7 @@
         android:id="@+id/card_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardElevation="10dp">
 
         <include layout="@layout/toolbar_layout" />
 
@@ -25,51 +22,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/theatremovie_list_item"/>
-
-
-
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/textInputLayout"-->
-<!--            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:padding="10dp"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:layout_editor_absoluteX="0dp">-->
-
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:id="@+id/input_theatreNumber"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:hint="Theatre Number"-->
-<!--                tools:layout_editor_absoluteX="0dp"-->
-<!--                tools:layout_editor_absoluteY="334dp" />-->
-
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/inputLayout1"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:padding="10dp">-->
-
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:id="@+id/input_timeslot"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:hint="Timeslot"-->
-<!--                android:inputType="number" />-->
-
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--    <androidx.appcompat.widget.AppCompatButton-->
-<!--        android:id="@+id/btn_selectMovie"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:background="@drawable/squircle"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:layout_margin="10dp"-->
-<!--        android:text="Select Movie"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"/>-->
 
 </LinearLayout>

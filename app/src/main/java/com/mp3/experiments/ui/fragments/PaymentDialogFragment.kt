@@ -17,7 +17,9 @@ import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
 import com.mp3.experiments.databinding.FragmentPaymentDialogBinding
+import com.mp3.experiments.ui.views.customer.MovieSelectionActivity
 import com.mp3.experiments.ui.views.customer.ReceiptActivity
+import com.mp3.experiments.ui.views.customer.SeatSelectionActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -40,6 +42,7 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
     private var numRows = 0
     private var numColumns = 0
 
+    var seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
     var seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
 
     override fun onCreateView(
@@ -68,6 +71,7 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
         numRows = cinemaModel.cinema_upperbox_length!! + cinemaModel.cinema_middlebox_length!! + cinemaModel.cinema_lowerbox_length!!
         numColumns = cinemaModel.cinema_upperbox_width!! + cinemaModel.cinema_middlebox_width!! + cinemaModel.cinema_lowerbox_width!!
 
+        seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
         seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
 
         if (receivedMatrix != null) {
@@ -101,22 +105,57 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
                             ).addOnSuccessListener { occupied ->
 
                                 if (occupied) {
-                                    Log.d("test1234", "${(row + 64 + 1).toChar()}${col+1} : occupied")
                                     isValid = false
                                 }
 
                                 if (row == numRows - 1 && col == numColumns - 1) {
                                     if (isValid) {
-                                        Toast.makeText(requireContext(), "All selected seats are not occupied", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(requireContext(), "Payment Successful", Toast.LENGTH_SHORT).show()
                                         onLoopCompleted()
 
                                     } else {
+                                        Toast.makeText(requireContext(), "Failed! Returning to seat selection!", Toast.LENGTH_SHORT).show()
                                         if (seatSelectedCount == 1) {
                                             Toast.makeText(requireContext(), "Your selected seat might be taken by another user!", Toast.LENGTH_SHORT).show()
                                         } else {
                                             Toast.makeText(requireContext(), "One of your seats might have been taken by another user!", Toast.LENGTH_SHORT).show()
                                         }
+                                        for (row1 in 0 until numRows) {
+                                            for (col1 in 0 until numColumns) {
+                                                viewModel.getSeatOccupied(
+                                                    row1,
+                                                    col1,
+                                                    cinemaModel.cinema_location!!,
+                                                    cinemaModel.cinema_name!!,
+                                                    "Theatre$theatreNumber",
+                                                    timeslot,
+                                                    cinemaModel.cinema_lowerbox_length!!,
+                                                    cinemaModel.cinema_middlebox_length!!
+                                                ) { seatData ->
+                                                    if (seatData != null) {
+                                                        seatOccupied[row1][col1] = seatData.occupied!!
+                                                        if (row1 == numRows - 1 && col1 == numColumns - 1) {
 
+                                                            viewModel.getMovieDetails(cinemaModel.cinema_location!!, cinemaModel.cinema_name!!, theatreNumber) {movieModel ->
+                                                                theatreMovieModel = movieModel!!
+                                                                seatOccupied = reverseRows(seatOccupied)
+                                                                val intent = Intent(requireContext(), SeatSelectionActivity::class.java)
+                                                                val bundle = Bundle()
+                                                                bundle.putSerializable("seatOccupied", seatOccupied)
+                                                                intent.putExtra("matrixBundle", bundle)
+                                                                intent.putExtra("cinemaModel", cinemaModel)
+                                                                intent.putExtra("theatreMovieModel", theatreMovieModel)
+                                                                intent.putExtra("theatreNumber", theatreNumber)
+                                                                intent.putExtra("timeslot", timeslot)
+                                                                context?.startActivity(intent)
+                                                            }
+                                                        }
+                                                    } else {
+                                                        Log.d("ntest", "seatData is null")
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -206,5 +245,14 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
         val calendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("MMMM dd, yyyy, hh:mm a", Locale.getDefault())
         return dateFormat.format(calendar.time)
+    }
+
+    fun reverseRows(array: Array<BooleanArray>): Array<BooleanArray> {
+        val numRows = array.size
+        val reversedArray = Array(numRows) { BooleanArray(array[0].size) }
+        for (i in 0 until numRows) {
+            reversedArray[i] = array[numRows - i - 1]
+        }
+        return reversedArray
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.mp3.experiments.R
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.TheatreMovieModel
@@ -59,6 +60,10 @@ class ReceiptActivity : AppCompatActivity() {
         binding.tvMoviePrice.text = theatreMovieModel?.movie_price.toString() + " php"
         binding.tvTheatreNumber.text = "Theatre$theatreNumber"
         binding.tvMovieTimeslot.text = timeslot
+        Glide.with(this)
+            .load(cinemaModel.cinema_logo)
+            .centerCrop()
+            .into(binding.ivCinemaLogo)
 
         val formattedTotalPrice = String.format("%.2f", totalPrice)
         binding.tvTotalAmount.text = formattedTotalPrice

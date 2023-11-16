@@ -42,7 +42,6 @@ class MovieTheatreSelectionActivity : AppCompatActivity() {
 
         viewModel.cinemaList.observe(this, Observer {
             cinemaAdapter.addCinemas(it)
-            Toast.makeText(this, "item count : ${cinemaAdapter.itemCount}", Toast.LENGTH_SHORT).show()
         })
         viewModel.observeCinemas()
     }

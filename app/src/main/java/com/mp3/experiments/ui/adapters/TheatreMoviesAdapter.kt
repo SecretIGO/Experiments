@@ -90,7 +90,7 @@ class TheatreMoviesAdapter (
             binding.tvMovieName.isSelected = true
             Glide.with(context)
                 .load(movie.movieDetails?.movie_image)
-                .centerCrop()
+                .fitCenter()
                 .into(binding.ivMovieBanner)
 
             viewModel.getMovieTimeslots(cinemaLocation, cinemaName, position+1) { timeslots ->
