@@ -7,42 +7,11 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <!-- First CardView -->
-    <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true">
-
-        <!-- Content for the first card -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Card 1 Content"
-            android:textSize="18sp"
-            android:textColor="@android:color/black" />
-    </androidx.cardview.widget.CardView>
-
-    <!-- Second CardView -->
-    <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true">
-
-        <!-- Content for the second card -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="Card 2 Content"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-    </androidx.cardview.widget.CardView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewContacts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="65dp"/>
 
 </LinearLayout>
