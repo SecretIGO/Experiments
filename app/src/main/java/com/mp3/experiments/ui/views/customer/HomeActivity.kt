@@ -2,6 +2,10 @@ package com.mp3.experiments.ui.views.customer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.denzcoskun.imageslider.ImageSlider
@@ -109,7 +113,26 @@ class HomeActivity : AppCompatActivity() {
         nowShowingRecyclerView.adapter = nowShowingAdapter
         comingSoonRecyclerView.adapter = comingSoonAdapter
 
+        setUpTimeslotSpinner()
+
+
+    }
+
+    private fun setUpTimeslotSpinner() {
+        val timeslotList = listOf("10:00 AM", "2:00 PM", "6:00 PM", "9:00 PM")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timeslotList)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        val timeslotSpinner = findViewById<Spinner>(R.id.timeslotSpinner)
+        timeslotSpinner.adapter = adapter
+
+        timeslotSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View
+
+        }
 
     }
 
 }
+
+
