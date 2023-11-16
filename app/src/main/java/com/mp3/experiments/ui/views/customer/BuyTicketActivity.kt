@@ -2,6 +2,7 @@ package com.mp3.experiments.ui.views.customer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.bumptech.glide.Glide
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.TheatreMovieModel
 import com.mp3.experiments.databinding.ActivityBuyTicketBinding
@@ -23,7 +24,7 @@ class BuyTicketActivity : AppCompatActivity() {
         binding = ActivityBuyTicketBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val theatreNumber = intent.getIntExtra("theatreNumber", 0)!!
+        val theatreNumber = intent.getIntExtra("theatreNumber", 0)
         val seatSelected_count = intent.getIntExtra("seatSelected_count", 0)
         val cinemaModel = intent.getParcelableExtra<CinemaModel>("cinemaModel")
         val theatreMovieModel = intent.getParcelableExtra<TheatreMovieModel>("theatreMovieModel")
@@ -62,6 +63,10 @@ class BuyTicketActivity : AppCompatActivity() {
         binding.tvMoviePrice.text = theatreMovieModel?.movie_price.toString()
         binding.tvNumOfSelectedSeats.text = seatSelected_count.toString()
         binding.tvTimeslot.text = time
+        Glide.with(this)
+            .load(theatreMovieModel?.movie_image)
+            .fitCenter()
+            .into(binding.ivMovieBanner)
 
         calculate_ticketPrice(seatSelected_count, theatreMovieModel?.movie_price!!)
         val formattedTotalPrice = String.format("%.2f", totalPrice)

@@ -146,11 +146,6 @@
                         android:layout_gravity="center|top"
                         android:src="@drawable/dialog_drag_indicator" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/red_800"/>
-
                     <LinearLayout
                         android:id="@+id/ll_signup"
                         android:layout_width="match_parent"
@@ -224,6 +219,32 @@
                                         />
 
                                 </com.google.android.material.textfield.TextInputLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="18dp"
+                                    android:orientation="horizontal"
+                                    android:background="@color/white">
+
+                                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                        android:id="@+id/btn_add_image"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="73dp"
+                                        android:layout_gravity=""
+                                        android:layout_margin="8dp"
+                                        android:layout_marginEnd="16dp"
+                                        android:backgroundTint="@color/white"
+                                        android:contentDescription="Add an Image"
+                                        android:src="@drawable/add" />
+
+                                    <ImageView
+                                        android:id="@+id/iv_selectedImage"
+                                        android:layout_width="72dp"
+                                        android:layout_height="72dp"
+                                        android:src="@drawable/default_profile" />
+
+                                </LinearLayout>
 
                                 <ImageButton
                                     android:layout_width="match_parent"

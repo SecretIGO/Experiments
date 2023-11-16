@@ -2,6 +2,8 @@ package com.mp3.experiments.data.nodes
 
 //user nodes
 const val NODE_USERS = "users"
+const val NODE_USER_DETAILS = "userDetails"
+const val NODE_TICKETS = "tickets"
 const val NODE_PROFILE_IMAGES = "profile"
 
 //movie nodes

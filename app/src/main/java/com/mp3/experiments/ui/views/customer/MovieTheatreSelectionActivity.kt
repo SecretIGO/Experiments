@@ -7,8 +7,11 @@ import android.provider.ContactsContract.Profile
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.mp3.experiments.R
+import com.mp3.experiments.data.states.AuthenticationStates
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
+import com.mp3.experiments.data.viewmodel.UserViewModel
 import com.mp3.experiments.databinding.ActivityMovieTheatreSelectionBinding
 import com.mp3.experiments.databinding.ToolbarLayoutBinding
 import com.mp3.experiments.ui.adapters.CinemaAdapter
@@ -18,6 +21,7 @@ class MovieTheatreSelectionActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMovieTheatreSelectionBinding
     private lateinit var viewModel : CinemaViewModel
+    private lateinit var auth_vm : UserViewModel
     private lateinit var cinemaAdapter : CinemaAdapter
     private lateinit var toolbar : ToolbarLayoutBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +38,14 @@ class MovieTheatreSelectionActivity : AppCompatActivity() {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
 
+        auth_vm = UserViewModel()
         viewModel = CinemaViewModel()
+
+        auth_vm.getUserProfile()
+        auth_vm.getAuthStates().observe(this@MovieTheatreSelectionActivity){
+            auth_func(it)
+        }
+
         cinemaAdapter = CinemaAdapter(this, ArrayList(), viewModel)
         binding.rvCinemaItems.adapter = cinemaAdapter
         val layoutManager = LinearLayoutManager(this)
@@ -44,5 +55,19 @@ class MovieTheatreSelectionActivity : AppCompatActivity() {
             cinemaAdapter.addCinemas(it)
         })
         viewModel.observeCinemas()
+    }
+
+    private fun auth_func(authenticationStates: AuthenticationStates) {
+        when (authenticationStates) {
+            is AuthenticationStates.Default -> {
+                toolbar.tvUsername.text = authenticationStates.user?.user_details?.username
+                Glide.with(this)
+                    .load(authenticationStates.user?.user_details?.user_profilePicture)
+                    .centerCrop()
+                    .into(toolbar.ivUserProfile)
+            }
+            AuthenticationStates.LogOut -> super.finish()
+            else -> {}
+        }
     }
 }

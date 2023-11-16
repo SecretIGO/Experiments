@@ -12,12 +12,15 @@ import android.widget.Toast
 import android.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.mp3.experiments.R
 import com.mp3.experiments.data.interfaces.LoopCompleteCallbackInterface
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.TheatreMovieModel
+import com.mp3.experiments.data.states.AuthenticationStates
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
+import com.mp3.experiments.data.viewmodel.UserViewModel
 import com.mp3.experiments.databinding.ActivityMovieSelectionBinding
 import com.mp3.experiments.databinding.ToolbarLayoutBinding
 import com.mp3.experiments.ui.adapters.CinemaAdapter
@@ -28,6 +31,7 @@ class MovieSelectionActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieSelectionBinding
     private lateinit var toolbar: ToolbarLayoutBinding
+    private lateinit var auth_vm : UserViewModel
     private lateinit var viewModel: CinemaViewModel
     private lateinit var adapter: TheatreMoviesAdapter
 
@@ -45,7 +49,13 @@ class MovieSelectionActivity : AppCompatActivity() {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
 
+        auth_vm = UserViewModel()
         viewModel = CinemaViewModel()
+
+        auth_vm.getUserProfile()
+        auth_vm.getAuthStates().observe(this@MovieSelectionActivity){
+            auth_func(it)
+        }
 
         val cinemaLocation = intent.getStringExtra("cinemaLocation")
         val cinemaName = intent.getStringExtra("cinemaName")
@@ -59,5 +69,19 @@ class MovieSelectionActivity : AppCompatActivity() {
             adapter.addMovies(it)
         })
         viewModel.observeTheatreMovies(cinemaLocation, cinemaName)
+    }
+
+    private fun auth_func(authenticationStates: AuthenticationStates) {
+        when (authenticationStates) {
+            is AuthenticationStates.Default -> {
+                toolbar.tvUsername.text = authenticationStates.user?.user_details?.username
+                Glide.with(this)
+                    .load(authenticationStates.user?.user_details?.user_profilePicture)
+                    .centerCrop()
+                    .into(toolbar.ivUserProfile)
+            }
+            AuthenticationStates.LogOut -> super.finish()
+            else -> {}
+        }
     }
 }

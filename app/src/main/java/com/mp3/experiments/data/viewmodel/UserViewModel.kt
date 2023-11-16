@@ -11,9 +11,11 @@ import com.google.firebase.database.getValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.mp3.experiments.data.model.UserDetailsModel
 import com.mp3.experiments.data.model.UserModel
 import com.mp3.experiments.data.nodes.NODE_PROFILE_IMAGES
 import com.mp3.experiments.data.nodes.NODE_USERS
+import com.mp3.experiments.data.nodes.NODE_USER_DETAILS
 import com.mp3.experiments.data.states.AuthenticationStates
 import com.mp3.experiments.data.states.StorageStates
 
@@ -22,8 +24,10 @@ class UserViewModel : ViewModel(){
     private val firebase_database = Firebase.database.reference
     private var firebase_storage = Firebase.storage.reference
 
-    fun getAuthStates(): LiveData<AuthenticationStates> = auth_states
     private var auth_states = MutableLiveData<AuthenticationStates>()
+    private var storage_states = MutableLiveData<StorageStates>()
+
+    fun getAuthStates(): LiveData<AuthenticationStates> = auth_states
 
     fun isSignedIn() {
         auth_states.value = AuthenticationStates.IsSignedIn(auth.currentUser != null)
@@ -63,31 +67,54 @@ class UserViewModel : ViewModel(){
     }
 
     fun createUserRecord(
-        email : String,
         username : String,
+        user_nickname : String,
         first_name : String,
         last_name : String,
-        gender : String,
+        email : String,
+        user_age : Int,
+        user_account_date_created : String,
         img : ByteArray
     ) {
-//        val userRef = firebase_storage.child(NODE_PROFILE_IMAGES + "/" + auth.currentUser?.uid + ".jpg")
-//
-//        userRef.putBytes(img).addOnSuccessListener {
-//            userRef.downloadUrl.addOnSuccessListener { it ->
-//                val user = UserModel()
-//                firebase_storage.child(NODE_USERS + "/" + auth.currentUser?.uid).setValue(user).addOnCompleteListener {
-//                    if(it.isSuccessful){
-//                        auth_states.value = AuthenticationStates.ProfileUpdated
-//                    }
-//                    else auth_states.value = AuthenticationStates.Error
-//                }
-//
-//            }.addOnFailureListener {
-//                storage_states.value = StorageStates.StorageFailed(it.message)
-//            }
-//        }.addOnFailureListener {
-//            storage_states.value = StorageStates.StorageFailed(it.message)
-//        }
+        val profileRef = firebase_storage
+            .child(NODE_PROFILE_IMAGES)
+            .child(auth.currentUser?.uid + ".jpg")
+
+        profileRef.putBytes(img).addOnSuccessListener {
+            profileRef.downloadUrl.addOnSuccessListener { it ->
+                val userDetails = UserDetailsModel(
+                    username,
+                    user_nickname,
+                    first_name,
+                    last_name,
+                    email,
+                    user_age,
+                    user_account_date_created,
+                    0,
+                    it.toString())
+
+                val user = UserModel(userDetails, null)
+
+                firebase_database.child(NODE_USERS)
+                    .child(auth.currentUser?.uid!!)
+                    .setValue(user)
+                    .addOnCompleteListener {
+                        if(it.isSuccessful){
+                            auth_states.value = AuthenticationStates.ProfileUpdated
+                        }
+                        else auth_states.value = AuthenticationStates.Error
+                    }
+            }.addOnFailureListener {
+                storage_states.value = StorageStates.StorageFailed(it.message)
+            }
+        }.addOnFailureListener {
+            storage_states.value = StorageStates.StorageFailed(it.message)
+        }
+    }
+
+    fun logOut() {
+        auth.signOut()
+        auth_states.value = AuthenticationStates.LogOut
     }
 
 }
