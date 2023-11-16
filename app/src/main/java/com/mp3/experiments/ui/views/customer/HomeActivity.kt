@@ -2,6 +2,8 @@ package com.mp3.experiments.ui.views.customer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.denzcoskun.imageslider.ImageSlider
 import com.denzcoskun.imageslider.constants.ActionTypes
 import com.denzcoskun.imageslider.constants.AnimationTypes
@@ -11,13 +13,21 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.interfaces.TouchListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.mp3.experiments.R
+import com.mp3.experiments.data.model.MovieItemsModel
+import com.mp3.experiments.data.model.MovieModel
+import com.mp3.experiments.databinding.ActivityHomeBinding
+import com.mp3.experiments.ui.adapters.ComingSoonAdapter
+import com.mp3.experiments.ui.adapters.NowShowingAdapter
 
 class HomeActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityHomeBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
 
-        val imageSlider = findViewById<ImageSlider>(R.id.image_slider) // init imageSlider
+        val imageSlider = binding.imageSlider // init imageSlider
 
         val imageList = ArrayList<SlideModel>() // Create image list
         imageList.add(SlideModel("https://www.cnet.com/a/img/resize/e40db3b1ecae8c7de688981520ac2c3d8c7c9617/hub/2023/08/16/23d96691-7b64-4113-81f8-71f8430f9aff/fast-x-peacock.jpg?auto=webp&width=1200"))
@@ -59,5 +69,47 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         })
+
+        // Assuming you have references to the RecyclerViews in your layout
+        val nowShowingRecyclerView = binding.rvNowShowing
+        val comingSoonRecyclerView = binding.rvComingSoon
+
+// Set up layout managers for RecyclerViews (you can choose LinearLayoutManager or GridLayoutManager)
+        val layoutManagerNowShowing = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val layoutManagerComingSoon = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+// Set layout managers to RecyclerViews
+        nowShowingRecyclerView.layoutManager = layoutManagerNowShowing
+        comingSoonRecyclerView.layoutManager = layoutManagerComingSoon
+
+        val nowShowingAdapter = NowShowingAdapter() // replace with your adapter class
+        val comingSoonAdapter = ComingSoonAdapter() // replace with your adapter class
+
+
+        val nowShowingMovies = listOf(
+            MovieItemsModel("Movie 1", "400", R.drawable.movie1),
+            MovieItemsModel("Movie 2", "450", R.drawable.movie2),
+            MovieItemsModel("Movie 3", "500", R.drawable.movie3),
+            MovieItemsModel("Movie 4", "550", R.drawable.movie4),
+            MovieItemsModel("Movie 5", "500", R.drawable.movie5),
+        )
+
+        val comingSoonMovies = listOf(
+            MovieItemsModel("Movie 6", "500", R.drawable.movie6),
+            MovieItemsModel("Movie 7", "550", R.drawable.movie7),
+            MovieItemsModel("Movie 8", "500", R.drawable.movie8),
+            MovieItemsModel("Movie 9", "550", R.drawable.movie9),
+            MovieItemsModel("Movie 10", "550", R.drawable.movie10),
+        )
+
+        nowShowingAdapter.nowShowingMovies = nowShowingMovies
+        comingSoonAdapter.comingSoonMovies = comingSoonMovies
+
+        // Set adapters to RecyclerViews
+        nowShowingRecyclerView.adapter = nowShowingAdapter
+        comingSoonRecyclerView.adapter = comingSoonAdapter
+
+
     }
+
 }
