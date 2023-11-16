@@ -2,6 +2,9 @@ package com.mp3.experiments.ui.views.admin.a_movies
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.widget.DatePicker
@@ -12,12 +15,14 @@ import com.mp3.experiments.data.model.MovieModel
 import com.mp3.experiments.data.viewmodel.MovieViewModel
 import com.mp3.experiments.databinding.ActivityAddMovieBinding
 import com.mp3.experiments.ui.views.admin.AdminActivity
+import java.io.ByteArrayOutputStream
 import java.util.Calendar
 
 
 class AddMovieActivity : AppCompatActivity() {
     private lateinit var binding : ActivityAddMovieBinding
     private lateinit var viewModel : MovieViewModel
+    private var imageUri : Uri?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +46,10 @@ class AddMovieActivity : AppCompatActivity() {
                 if (exists) {
                     Toast.makeText(this, "${binding.inputMovieName.text.toString()} already exists!", Toast.LENGTH_SHORT).show()
                 } else {
+                    val bitmap = (binding.ivSelectedImage.drawable as BitmapDrawable).bitmap
+                    val baos = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+
                     val movie = MovieModel(
                         binding.inputMovieName.text.toString(),
                         binding.inputMoviePrice.text.toString().toDouble(),
@@ -50,7 +59,7 @@ class AddMovieActivity : AppCompatActivity() {
                         binding.inputMovieSynopsis.text.toString(),
                         ""
                     )
-                    viewModel.createMovie_toDatabase(movie)
+                    viewModel.createMovie_toDatabase(movie, baos.toByteArray())
                     Toast.makeText(this, "Added movie to database!", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, AdminActivity::class.java))
                 }

@@ -25,10 +25,14 @@ import com.mp3.experiments.data.nodes.NODE_MOVIE_DETAILS
 import com.mp3.experiments.data.nodes.NODE_MOVIE_TIMESLOT
 import com.mp3.experiments.data.nodes.NODE_SEATS
 import com.mp3.experiments.data.nodes.NODE_UPPERBOX
+import com.mp3.experiments.data.states.AuthenticationStates
+import com.mp3.experiments.data.states.StorageStates
 
 class CinemaViewModel : ViewModel() {
     private val firebase_database = Firebase.database.reference
     private val firebase_storage = Firebase.storage.reference
+
+    private var storage_states = MutableLiveData<StorageStates>()
 
     private val _cinemaList = MutableLiveData<List<CinemaModel>>()
     val cinemaList: LiveData<List<CinemaModel>> get() = _cinemaList
@@ -334,7 +338,9 @@ class CinemaViewModel : ViewModel() {
 
         lowerbox_length : Int,
         middlebox_length : Int,
-        upperbox_length : Int
+        upperbox_length : Int,
+
+        img : ByteArray
     ) {
         val numRows = lowerbox_length + middlebox_length + upperbox_length
         val numColumns = lowerbox_width + middlebox_width + upperbox_width
@@ -347,23 +353,34 @@ class CinemaViewModel : ViewModel() {
 
         val cinemaCapacity = numRows * numColumns
 
-        val cinemaDetails = CinemaModel(
-            cinemaLocation,
-            cinemaName,
-            cinemaCapacity,
-            upperbox_length,
-            middlebox_length,
-            lowerbox_length,
-            upperbox_width,
-            middlebox_width,
-            lowerbox_width,
-            "n/a")
+        cinemaLogoReference.putBytes(img).addOnSuccessListener {
+            cinemaLogoReference.downloadUrl.addOnSuccessListener {
+                val cinemaDetails = CinemaModel(
+                    cinemaLocation,
+                    cinemaName,
+                    cinemaCapacity,
+                    upperbox_length,
+                    middlebox_length,
+                    lowerbox_length,
+                    upperbox_width,
+                    middlebox_width,
+                    lowerbox_width,
+                    it.toString())
 
-        val cinemaRef0 = cinemaRef
-            .child(cinemaLocation)
-            .child(cinemaName)
-            .child(NODE_CINEMA_DETAILS)
-        cinemaRef0.setValue(cinemaDetails)
+                val cinemaRef0 = cinemaRef
+                    .child(cinemaLocation)
+                    .child(cinemaName)
+                    .child(NODE_CINEMA_DETAILS)
+
+                cinemaRef0.setValue(cinemaDetails)
+
+            }.addOnFailureListener {
+                storage_states.value = StorageStates.StorageFailed(it.message)
+            }
+
+        }.addOnFailureListener {
+            storage_states.value = StorageStates.StorageFailed(it.message)
+        }
 
         for (theatre in 0 until numOf_theatres) {
             val theatreRef = cinemaRef

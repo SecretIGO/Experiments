@@ -7,5 +7,5 @@ class MovieModel (
     val movie_date_end : String? = "",
     val movie_description : String? = "",
     val movie_synopsis : String? = "",
-    val movie_image : String? = ""
+    var movie_image : String? = ""
 )

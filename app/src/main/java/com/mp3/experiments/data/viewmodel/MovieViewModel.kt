@@ -1,12 +1,13 @@
 package com.mp3.experiments.data.viewmodel
 
 import android.util.Log
-import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.MovieModel
 import com.mp3.experiments.data.model.SeatTimeslotModel
@@ -19,13 +20,18 @@ import com.mp3.experiments.data.nodes.NODE_MOVIE_DETAILS
 import com.mp3.experiments.data.nodes.NODE_MOVIE_TIMESLOT
 import com.mp3.experiments.data.nodes.NODE_SEATS
 import com.mp3.experiments.data.nodes.NODE_UPPERBOX
+import com.mp3.experiments.data.states.StorageStates
 
 class MovieViewModel : ViewModel(){
 
     private val firebase_database = Firebase.database.reference
+    private val firebase_storage = Firebase.storage.reference
+
+    private var storage_states = MutableLiveData<StorageStates>()
 
     fun checkIfMovieExist(movieName : String): Task<Boolean> {
-        val movieRef = firebase_database.child(NODE_MOVIES)
+        val movieRef = firebase_database
+            .child(NODE_MOVIES)
             .child(movieName)
 
         return movieRef.get().continueWith { task ->
@@ -39,8 +45,24 @@ class MovieViewModel : ViewModel(){
 
     }
 
-    fun createMovie_toDatabase(movie : MovieModel){
-        val movieRef = firebase_database.child(NODE_MOVIES)
+    fun createMovie_toDatabase(movie : MovieModel, img: ByteArray){
+        val movieRef = firebase_database
+            .child(NODE_MOVIES)
+        val cinemaLogoReference = firebase_storage
+            .child(NODE_MOVIES)
+            .child("${movie.movie_name}.jpg")
+
+        cinemaLogoReference.putBytes(img).addOnSuccessListener {
+            cinemaLogoReference.downloadUrl.addOnSuccessListener {
+                movie.movie_image = it.toString()
+                movieRef.child(movie.movie_name!!).setValue(movie)
+            }.addOnFailureListener {
+                storage_states.value = StorageStates.StorageFailed(it.message)
+            }
+
+        }.addOnFailureListener {
+            storage_states.value = StorageStates.StorageFailed(it.message)
+        }
 
         movie.movie_name?.let { movieRef.child(it).setValue(movie) }
     }

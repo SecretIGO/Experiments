@@ -90,7 +90,7 @@
                         android:id="@+id/iv_profilePicture"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/robinsons_logo"
+                        android:src="@drawable/default_profile"
                         android:scaleType="centerCrop"/>
 
 
