@@ -46,7 +46,7 @@
                 android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SecretIGO"
+                android:text="User?"
                 android:layout_gravity="center_vertical"
                 />
 
@@ -60,7 +60,7 @@
                     android:id="@+id/iv_userProfile"
                     android:layout_width="25sp"
                     android:layout_height="25sp"
-                    android:src="@drawable/robinsons_logo"/>
+                    android:src="@drawable/default_profile"/>
 
             </androidx.cardview.widget.CardView>
 

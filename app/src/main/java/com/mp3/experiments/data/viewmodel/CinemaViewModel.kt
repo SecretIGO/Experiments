@@ -487,10 +487,6 @@ class CinemaViewModel : ViewModel() {
                     moviesList.add(theatre!!)
                 }
 
-                for (movie in moviesList){
-//                    Log.d("CinemaObserver", "Movie Name: ${movie.movie_name}, Movie Price: ${movie.movie_price}")
-                }
-
                 _theatre_moviesList.value = moviesList
             }
 

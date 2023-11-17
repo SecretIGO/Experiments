@@ -15,7 +15,9 @@ import com.mp3.experiments.R
 import com.mp3.experiments.data.interfaces.LoopCompleteCallbackInterface
 import com.mp3.experiments.data.model.CinemaModel
 import com.mp3.experiments.data.model.TheatreMovieModel
+import com.mp3.experiments.data.model.TicketModel
 import com.mp3.experiments.data.viewmodel.CinemaViewModel
+import com.mp3.experiments.data.viewmodel.UserViewModel
 import com.mp3.experiments.databinding.FragmentPaymentDialogBinding
 import com.mp3.experiments.ui.views.customer.MovieSelectionActivity
 import com.mp3.experiments.ui.views.customer.ReceiptActivity
@@ -35,6 +37,7 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
     private lateinit var theatreMovieModel : TheatreMovieModel
 
     private lateinit var binding : FragmentPaymentDialogBinding
+    private lateinit var auth_vm : UserViewModel
     private lateinit var viewModel : CinemaViewModel
 
     private var isValid = true
@@ -44,6 +47,7 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
 
     var seatOccupied = Array(numRows) { BooleanArray(numColumns) { false } }
     var seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
+    var text_seatSelected = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +55,7 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPaymentDialogBinding.inflate(inflater, container, false)
+        auth_vm = UserViewModel()
         viewModel = CinemaViewModel()
 
         return binding.root
@@ -106,6 +111,16 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
 
                                 if (occupied) {
                                     isValid = false
+                                }
+
+                                if (seatSelected[row][col]){
+                                    if (text_seatSelected == "")
+                                        text_seatSelected = "${(64+row+1).toChar()}${col+1}"
+                                    else {
+                                        text_seatSelected += ", ${(64+row+1).toChar()}${col+1}"
+                                    }
+
+                                    Log.d("SeatSelectedTest", "$text_seatSelected are selected")
                                 }
 
                                 if (row == numRows - 1 && col == numColumns - 1) {
@@ -219,26 +234,39 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
                         row,
                         col,
                         timeslot)
-                    Toast.makeText(requireContext(), "${(64 + row + 1).toChar()}${col+1} is selected", Toast.LENGTH_SHORT).show()
-
-                    val currentDateTime = getCurrentDateTime()
-                    val intent = Intent(requireContext(), ReceiptActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-
-                    val bundle = Bundle()
-                    bundle.putSerializable("seatSelected", seatSelected)
-                    intent.putExtra("matrixBundle", bundle)
-                    intent.putExtra("cinemaModel", cinemaModel)
-                    intent.putExtra("theatreMovieModel", theatreMovieModel)
-                    intent.putExtra("theatreNumber", theatreNumber)
-                    intent.putExtra("timeslot", timeslot)
-                    intent.putExtra("totalAmount", totalPrice)
-                    intent.putExtra("datetime", currentDateTime)
-
-                    startActivity(intent)
                 }
             }
         }
+
+        val currentDateTime = getCurrentDateTime()
+        val intent = Intent(requireContext(), ReceiptActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+
+        intent.putExtra("seatSelected", text_seatSelected)
+        intent.putExtra("cinemaModel", cinemaModel)
+        intent.putExtra("theatreMovieModel", theatreMovieModel)
+        intent.putExtra("theatreNumber", theatreNumber)
+        intent.putExtra("timeslot", timeslot)
+        intent.putExtra("totalAmount", totalPrice)
+        intent.putExtra("datetime", currentDateTime)
+
+        val ticket = TicketModel(
+            cinemaModel.cinema_location,
+            cinemaModel.cinema_name,
+            "Theatre$theatreNumber",
+            text_seatSelected,
+            seatSelectedCount,
+            theatreMovieModel.movie_name,
+            theatreMovieModel.movie_price,
+            timeslot,
+            totalPrice,
+            getCurrentDateTime(),
+            binding.inputPayment.text.toString().toDouble()
+        )
+
+        auth_vm.addTicket(ticket)
+
+        startActivity(intent)
     }
 
     fun getCurrentDateTime(): String {

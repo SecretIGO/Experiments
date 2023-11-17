@@ -36,6 +36,11 @@ class SigninActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel = UserViewModel()
+        viewModel.getAuthStates().observe(this@SigninActivity){
+            renderUi(it)
+        }
+
+        bindAnimations()
 
         binding.btnAddImage.setOnClickListener{
             resultLauncher.launch("image/*")
@@ -71,7 +76,138 @@ class SigninActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
+        imageUri = it
+        binding.ivSelectedImage.setImageURI(imageUri)
+    }
+
+    private fun handleState(state : AuthenticationStates, baos : ByteArray) {
+        when(state) {
+            is AuthenticationStates.SignedUp -> viewModel.createUserRecord(
+                binding.inputSuDisplayName.text.toString(),
+                binding.inputSuNickname.text.toString(),
+                binding.inputSuFirstName.text.toString(),
+                binding.inputSuLastName.text.toString(),
+                binding.inputSuEmail.text.toString(),
+                binding.inputSuAge.text.toString().toInt(),
+                getCurrentDateTime(),
+                baos
+            )
+
+            is AuthenticationStates.ProfileUpdated -> {
+                startActivity(Intent(this@SigninActivity, MovieTheatreSelectionActivity::class.java))
+                finish()
+            }
+            else -> {}
+        }
+    }
+
+    private fun auth_func(state : AuthenticationStates) {
+        when(state) {
+            AuthenticationStates.SignedIn -> {
+                startActivity(Intent(this@SigninActivity, MovieTheatreSelectionActivity::class.java))
+                finish()
+            }
+            else -> {}
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.isSignedIn()
+    }
+
+    private fun renderUi(states : AuthenticationStates) {
+        when(states) {
+            is AuthenticationStates.IsSignedIn -> {
+                if(states.isSignedIn) {
+                    startActivity(Intent(this@SigninActivity, MovieTheatreSelectionActivity::class.java))
+                    finish()
+                }
+            }
+            AuthenticationStates.SignedIn -> {
+                startActivity(Intent(this@SigninActivity, SigninActivity::class.java))
+                finish()
+            }
+            AuthenticationStates.Error -> {}
+            else -> {}
+        }
+    }
+
+    fun dpToPx(dp: Float): Float {
+        return dp * resources.displayMetrics.density
+    }
+
+    fun spToPx(sp: Float): Float {
+        return sp * resources.displayMetrics.scaledDensity
+    }
+
+    fun getCurrentDateTime(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy, hh:mm a", Locale.getDefault())
+        return dateFormat.format(calendar.time)
+    }
+
+    fun signIn_CheckIfNoEmptyFields(): Boolean {
+        var isValid = true
+
+        if (binding.inputEmail.text.isNullOrEmpty()){
+            binding.inputEmail.error = "Empty Field!"
+            isValid = false
+        }
+
+        if (binding.inputPassword.text.isNullOrEmpty()){
+            binding.inputPassword.error = "Empty Field!"
+            isValid = false
+        }
+
+
+        return isValid
+    }
+
+    fun signUp_checkIfNoEmptyFields(): Boolean{
+        var isValid = true
+
+        if (binding.inputSuEmail.text.isNullOrEmpty()){
+            binding.inputSuEmail.error = "Empty Field"
+            isValid = false
+        }
+
+        if (binding.inputSuPassword.text.isNullOrEmpty()){
+            binding.inputSuPassword.error = "Empty Field"
+            isValid = false
+        }
+
+        if (binding.inputSuFirstName.text.isNullOrEmpty()){
+            binding.inputSuFirstName.error = "Empty Field"
+            isValid = false
+        }
+
+        if (binding.inputSuLastName.text.isNullOrEmpty()){
+            binding.inputSuLastName.error = "Empty Field"
+            isValid = false
+        }
+
+        if (binding.inputSuDisplayName.text.isNullOrEmpty()){
+            binding.inputSuDisplayName.error = "Empty Field"
+            isValid = false
+        }
+        if (binding.inputSuNickname.text.isNullOrEmpty()){
+            binding.inputSuNickname.error = "Empty Field"
+            isValid = false
+        }
+        if (binding.inputSuAge.text.isNullOrEmpty()){
+            binding.inputSuAge.error = "Empty Field"
+            isValid = false
+        }
+
+        return isValid
+
+    }
+
+    fun bindAnimations(){
         val fadeIn = AlphaAnimation(0f, 1f)
         fadeIn.duration = 500
 
@@ -139,113 +275,6 @@ class SigninActivity : AppCompatActivity() {
 
         bottomSheetBehavior.peekHeight = spToPx(120f).toInt()
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-    }
-
-    private val resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
-        imageUri = it
-        binding.ivSelectedImage.setImageURI(imageUri)
-    }
-
-    private fun handleState(state : AuthenticationStates, baos : ByteArray) {
-        when(state) {
-            is AuthenticationStates.SignedUp -> viewModel.createUserRecord(
-                binding.inputSuDisplayName.text.toString(),
-                binding.inputSuNickname.text.toString(),
-                binding.inputSuFirstName.text.toString(),
-                binding.inputSuLastName.text.toString(),
-                binding.inputSuEmail.text.toString(),
-                binding.inputSuAge.text.toString().toInt(),
-                getCurrentDateTime(),
-                baos
-            )
-
-            is AuthenticationStates.ProfileUpdated -> {
-                startActivity(Intent(this@SigninActivity, MovieTheatreSelectionActivity::class.java))
-                finish()
-            }
-            else -> {}
-        }
-    }
-
-    private fun auth_func(state : AuthenticationStates) {
-        when(state) {
-            AuthenticationStates.SignedIn -> {
-                startActivity(Intent(this@SigninActivity, MovieTheatreSelectionActivity::class.java))
-                finish()
-            }
-            else -> {}
-        }
-    }
-
-    fun dpToPx(dp: Float): Float {
-        return dp * resources.displayMetrics.density
-    }
-
-    fun spToPx(sp: Float): Float {
-        return sp * resources.displayMetrics.scaledDensity
-    }
-
-    fun getCurrentDateTime(): String {
-        val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MMMM dd, yyyy, hh:mm a", Locale.getDefault())
-        return dateFormat.format(calendar.time)
-    }
-
-    fun signIn_CheckIfNoEmptyFields(): Boolean {
-        var isValid = true
-
-        if (binding.inputEmail.text.isNullOrEmpty()){
-            binding.inputEmail.error = "Email is required!"
-            isValid = false
-        }
-
-        if (binding.inputPassword.text.isNullOrEmpty()){
-            binding.inputPassword.error = "Password is required!"
-            isValid = false
-        }
-
-
-        return isValid
-    }
-
-    fun signUp_checkIfNoEmptyFields(): Boolean{
-        var isValid = true
-
-        if (binding.inputSuEmail.text.isNullOrEmpty()){
-            binding.inputSuEmail.error = "Empty Field"
-            isValid = false
-        }
-
-        if (binding.inputSuPassword.text.isNullOrEmpty()){
-            binding.inputSuPassword.error = "Empty Field"
-            isValid = false
-        }
-
-        if (binding.inputSuFirstName.text.isNullOrEmpty()){
-            binding.inputSuFirstName.error = "Empty Field"
-            isValid = false
-        }
-
-        if (binding.inputSuLastName.text.isNullOrEmpty()){
-            binding.inputSuLastName.error = "Empty Field"
-            isValid = false
-        }
-
-        if (binding.inputSuDisplayName.text.isNullOrEmpty()){
-            binding.inputSuDisplayName.error = "Empty Field"
-            isValid = false
-        }
-        if (binding.inputSuNickname.text.isNullOrEmpty()){
-            binding.inputSuNickname.error = "Empty Field"
-            isValid = false
-        }
-        if (binding.inputSuAge.text.isNullOrEmpty()){
-            binding.inputSuAge.error = "Empty Field"
-            isValid = false
-        }
-
-        return isValid
-
     }
 
 }

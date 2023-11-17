@@ -1,5 +1,6 @@
 package com.mp3.experiments.data.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,9 +12,11 @@ import com.google.firebase.database.getValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.mp3.experiments.data.model.TicketModel
 import com.mp3.experiments.data.model.UserDetailsModel
 import com.mp3.experiments.data.model.UserModel
 import com.mp3.experiments.data.nodes.NODE_PROFILE_IMAGES
+import com.mp3.experiments.data.nodes.NODE_TICKETS
 import com.mp3.experiments.data.nodes.NODE_USERS
 import com.mp3.experiments.data.nodes.NODE_USER_DETAILS
 import com.mp3.experiments.data.states.AuthenticationStates
@@ -27,6 +30,8 @@ class UserViewModel : ViewModel(){
     private var auth_states = MutableLiveData<AuthenticationStates>()
     private var storage_states = MutableLiveData<StorageStates>()
 
+    private var _tickets = MutableLiveData<List<TicketModel>>()
+    val tickets : LiveData<List<TicketModel>> get() = _tickets
     fun getAuthStates(): LiveData<AuthenticationStates> = auth_states
 
     fun isSignedIn() {
@@ -110,6 +115,68 @@ class UserViewModel : ViewModel(){
         }.addOnFailureListener {
             storage_states.value = StorageStates.StorageFailed(it.message)
         }
+    }
+
+    fun addTicket(ticket: TicketModel){
+        val ticketRef = firebase_database
+            .child(NODE_USERS)
+            .child(auth.currentUser?.uid!!)
+            .child(NODE_TICKETS)
+
+        val newKey = ticketRef.push().key
+        updateUserTicketCount(ticket.number_of_selected_seats!!)
+
+        ticketRef.child(newKey!!).setValue(ticket)
+    }
+
+    fun updateUserTicketCount(numOfTickets : Int){
+        val userRef = firebase_database
+            .child(NODE_USERS)
+            .child(auth.currentUser?.uid!!)
+            .child(NODE_USER_DETAILS)
+
+        userRef.child("tickets_bought").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                val currentTicketCount = dataSnapshot.getValue(Int::class.java) ?: 0
+
+                val updatedTicketCount = currentTicketCount + numOfTickets
+
+                userRef.child("tickets_bought").setValue(updatedTicketCount)
+                }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+                }
+            }
+        )
+
+
+    }
+
+    fun observeTickets(){
+        val ticketRef = firebase_database
+            .child(NODE_USERS)
+            .child(auth.currentUser?.uid!!)
+            .child(NODE_TICKETS)
+
+        val ticketsListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val ticketModel : MutableList<TicketModel> = mutableListOf()
+                for (ticketSnapshot in dataSnapshot.children) {
+                    val ticket = ticketSnapshot.getValue<TicketModel>()
+
+                    ticketModel.add(ticket!!)
+                }
+
+                _tickets.value = ticketModel
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TicketObserver", "Failed to get tickets")
+            }
+        }
+        ticketRef.addValueEventListener(ticketsListener)
     }
 
     fun logOut() {
