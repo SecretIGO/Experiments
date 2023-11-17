@@ -25,7 +25,7 @@
             android:weightSum="4">
 
             <ImageView
-                android:id="@+id/iv_NowShowing"
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"/>
 

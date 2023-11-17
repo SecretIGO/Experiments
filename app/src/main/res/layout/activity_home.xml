@@ -8,6 +8,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.views.customer.HomeActivity">
 
+    <TextView
+        android:id="@+id/tv_NowShowing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Now Showing"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
     <com.denzcoskun.imageslider.ImageSlider
         android:id="@+id/image_slider"
         android:layout_width="wrap_content"
@@ -19,44 +29,13 @@
         app:iss_unselected_dot="@drawable/default_unselected_dot"
         app:iss_text_align="CENTER"/>
 
-    <TextView
-        android:id="@+id/tv_NowShowing"
+    <Button
+        android:id="@+id/btn_home"
+        android:text="Buy Tickets Now!"
+        android:textSize="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="Now Showing"
-        android:textColor="#ffffff"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_NowShowing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="#ffffff"
-        android:padding="8dp"
-        tools:listitem="@layout/list_movies_now_showing_items"/>
-
-    <TextView
-        android:id="@+id/tv_ComingSoon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="Coming Soon"
-        android:textColor="#ffffff"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_ComingSoon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="#ffffff"
-        android:padding="8dp"
-        tools:listitem="@layout/list_movies_coming_soon_items"/>
+    </Button>
 
 </LinearLayout>

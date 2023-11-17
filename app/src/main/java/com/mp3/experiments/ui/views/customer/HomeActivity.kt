@@ -1,11 +1,14 @@
 package com.mp3.experiments.ui.views.customer
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.denzcoskun.imageslider.ImageSlider
@@ -25,13 +28,11 @@ import com.mp3.experiments.ui.adapters.NowShowingAdapter
 
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityHomeBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
+        setContentView(R.layout.activity_home)
 
-        val imageSlider = binding.imageSlider // init imageSlider
+        val imageSlider = findViewById<ImageSlider>(R.id.image_slider)
 
         val imageList = ArrayList<SlideModel>() // Create image list
         imageList.add(SlideModel("https://www.cnet.com/a/img/resize/e40db3b1ecae8c7de688981520ac2c3d8c7c9617/hub/2023/08/16/23d96691-7b64-4113-81f8-71f8430f9aff/fast-x-peacock.jpg?auto=webp&width=1200"))
@@ -48,6 +49,7 @@ class HomeActivity : AppCompatActivity() {
             override fun onItemSelected(position: Int) {
                 // You can listen here.
                 println("normal")
+
             }
 
             override fun doubleClick(position: Int) {
@@ -74,65 +76,12 @@ class HomeActivity : AppCompatActivity() {
             }
         })
 
-        // Assuming you have references to the RecyclerViews in your layout
-        val nowShowingRecyclerView = binding.rvNowShowing
-        val comingSoonRecyclerView = binding.rvComingSoon
-
-// Set up layout managers for RecyclerViews (you can choose LinearLayoutManager or GridLayoutManager)
-        val layoutManagerNowShowing = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        val layoutManagerComingSoon = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
-// Set layout managers to RecyclerViews
-        nowShowingRecyclerView.layoutManager = layoutManagerNowShowing
-        comingSoonRecyclerView.layoutManager = layoutManagerComingSoon
-
-        val nowShowingAdapter = NowShowingAdapter() // replace with your adapter class
-        val comingSoonAdapter = ComingSoonAdapter() // replace with your adapter class
-
-
-        val nowShowingMovies = listOf(
-            MovieItemsModel("Movie 1", "400", R.drawable.movie1),
-            MovieItemsModel("Movie 2", "450", R.drawable.movie2),
-            MovieItemsModel("Movie 3", "500", R.drawable.movie3),
-            MovieItemsModel("Movie 4", "550", R.drawable.movie4),
-            MovieItemsModel("Movie 5", "500", R.drawable.movie5),
-        )
-
-        val comingSoonMovies = listOf(
-            MovieItemsModel("Movie 6", "500", R.drawable.movie6),
-            MovieItemsModel("Movie 7", "550", R.drawable.movie7),
-            MovieItemsModel("Movie 8", "500", R.drawable.movie8),
-            MovieItemsModel("Movie 9", "550", R.drawable.movie9),
-            MovieItemsModel("Movie 10", "550", R.drawable.movie10),
-        )
-
-        nowShowingAdapter.nowShowingMovies = nowShowingMovies
-        comingSoonAdapter.comingSoonMovies = comingSoonMovies
-
-        // Set adapters to RecyclerViews
-        nowShowingRecyclerView.adapter = nowShowingAdapter
-        comingSoonRecyclerView.adapter = comingSoonAdapter
-
-        setUpTimeslotSpinner()
-
-
-    }
-
-    private fun setUpTimeslotSpinner() {
-        val timeslotList = listOf("10:00 AM", "2:00 PM", "6:00 PM", "9:00 PM")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timeslotList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        val timeslotSpinner = findViewById<Spinner>(R.id.timeslotSpinner)
-        timeslotSpinner.adapter = adapter
-
-        timeslotSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View
-
+        val button = findViewById<Button>(R.id.btn_home)
+        button.setOnClickListener {
+            // Handle the button click, start a new activity
+            val intent = Intent(this@HomeActivity, ReceiptActivity::class.java)
+            startActivity(intent)
         }
 
     }
-
 }
-
-
