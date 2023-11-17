@@ -95,60 +95,6 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cinema Sales Statistics"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:background="@color/red_400"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Search for a specific theatre to check for sales"
-            android:layout_gravity="center"/>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:padding="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/rl_logo"
-            tools:layout_editor_absoluteX="0dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/input_CinemaLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Cinema Location"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="334dp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout2"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-            tools:layout_editor_absoluteX="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/input_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Theatre Number"
-                tools:layout_editor_absoluteX="0dp"
-                tools:layout_editor_absoluteY="334dp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="Movie Settings"
             android:textColor="@color/white"
             android:gravity="center"
@@ -165,31 +111,33 @@
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:rowCount="3"
             android:columnCount="2">
 
             <Button
                 android:id="@+id/btn_addMovie"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
                 android:backgroundTint="@color/red_400"
-                android:text="Add Movie"/>
+                android:text="Add Movie"
+                android:layout_margin="5dp"/>
 
             <Button
                 android:id="@+id/btn_editMovie"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
                 android:backgroundTint="@color/red_400"
                 android:text="Edit Movie"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
+                android:layout_margin="5dp"/>
             <Button
                 android:id="@+id/btn_deleteMovie"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
                 android:backgroundTint="@color/red_800"
-                android:text="Delete Movie"/>
+                android:text="Delete Movie"
+                android:layout_margin="5dp"/>
         </GridLayout>
 
         <ImageButton

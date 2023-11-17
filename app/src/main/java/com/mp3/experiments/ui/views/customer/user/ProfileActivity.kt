@@ -33,6 +33,10 @@ class ProfileActivity : AppCompatActivity() {
         binding.btnLogout.setOnClickListener {
             auth_vm.logOut()
         }
+
+        binding.btnViewTickets.setOnClickListener {
+            startActivity(Intent(this, TicketsActivity::class.java))
+        }
     }
 
     private fun auth_func(authenticationStates: AuthenticationStates) {

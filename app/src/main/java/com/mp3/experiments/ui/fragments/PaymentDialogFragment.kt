@@ -261,7 +261,8 @@ class PaymentDialogFragment : BottomSheetDialogFragment(), LoopCompleteCallbackI
             timeslot,
             totalPrice,
             getCurrentDateTime(),
-            binding.inputPayment.text.toString().toDouble()
+            binding.inputPayment.text.toString().toDouble(),
+            cinemaModel.cinema_logo
         )
 
         auth_vm.addTicket(ticket)

@@ -21,47 +21,23 @@ class ReceiptActivity : AppCompatActivity() {
         binding = ActivityReceiptBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val text_seatSelected = intent.getStringExtra("seatSelected")
         val theatreNumber = intent.getIntExtra("theatreNumber", 0)!!
         val cinemaModel = intent.getParcelableExtra<CinemaModel>("cinemaModel")
         val theatreMovieModel = intent.getParcelableExtra<TheatreMovieModel>("theatreMovieModel")
-        val receivedBundle = intent.getBundleExtra("matrixBundle")
-        val receivedMatrix = receivedBundle?.getSerializable("seatSelected") as? Array<BooleanArray>
         val timeslot = intent.getStringExtra("timeslot")!!
         val totalPrice = intent.getDoubleExtra("totalAmount", 0.0)
         val datetime = intent.getStringExtra("datetime")
 
-        val numRows = cinemaModel?.cinema_upperbox_length!! + cinemaModel.cinema_middlebox_length!! + cinemaModel.cinema_lowerbox_length!!
-        val numColumns = cinemaModel.cinema_upperbox_width!! + cinemaModel.cinema_middlebox_width!! + cinemaModel.cinema_lowerbox_width!!
-
-        var seatSelected = Array(numRows) { BooleanArray(numColumns) { false } }
-
-        if (receivedMatrix != null) {
-            seatSelected = receivedMatrix
-        }
-
-        for (row in 0 until numRows) {
-            for (col in 0 until numColumns) {
-                if (seatSelected[row][col]) {
-                    var tempStr = binding.tvMovieSeats.text.toString()
-
-                    if (tempStr == "n/a")
-                        binding.tvMovieSeats.text = "${(64+row+1).toChar()}${col+1}"
-                    else {
-                        tempStr += ", ${(64+row+1).toChar()}${col+1}"
-                        binding.tvMovieSeats.text = tempStr
-                    }
-                }
-            }
-        }
-
-        binding.tvCinemaName.text = cinemaModel.cinema_name
-        binding.tvCinemaLocation.text = cinemaModel.cinema_location
+        binding.tvMovieSeats.text = text_seatSelected
+        binding.tvCinemaName.text = cinemaModel?.cinema_name
+        binding.tvCinemaLocation.text = cinemaModel?.cinema_location
         binding.tvMovieName.text = theatreMovieModel?.movie_name
         binding.tvMoviePrice.text = theatreMovieModel?.movie_price.toString() + " php"
         binding.tvTheatreNumber.text = "Theatre$theatreNumber"
         binding.tvMovieTimeslot.text = timeslot
         Glide.with(this)
-            .load(cinemaModel.cinema_logo)
+            .load(cinemaModel?.cinema_logo)
             .centerCrop()
             .into(binding.ivCinemaLogo)
 

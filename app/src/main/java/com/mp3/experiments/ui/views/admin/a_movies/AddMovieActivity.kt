@@ -10,6 +10,7 @@ import android.text.Editable
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.mp3.experiments.data.model.MovieModel
 import com.mp3.experiments.data.viewmodel.MovieViewModel
@@ -17,7 +18,6 @@ import com.mp3.experiments.databinding.ActivityAddMovieBinding
 import com.mp3.experiments.ui.views.admin.AdminActivity
 import java.io.ByteArrayOutputStream
 import java.util.Calendar
-
 
 class AddMovieActivity : AppCompatActivity() {
     private lateinit var binding : ActivityAddMovieBinding
@@ -37,6 +37,10 @@ class AddMovieActivity : AppCompatActivity() {
 
         binding.inputMovieEnd.setOnClickListener{
             showDatePickerDialog(binding.inputMovieEnd)
+        }
+
+        binding.btnAddImage.setOnClickListener{
+            resultLauncher.launch("image/*")
         }
 
         binding.btnAddMovie.setOnClickListener {
@@ -63,10 +67,13 @@ class AddMovieActivity : AppCompatActivity() {
                     Toast.makeText(this, "Added movie to database!", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, AdminActivity::class.java))
                 }
-
             }
-
         }
+    }
+
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()){
+        imageUri = it
+        binding.ivSelectedImage.setImageURI(imageUri)
     }
 
     private fun showDatePickerDialog(inputField : EditText) {
