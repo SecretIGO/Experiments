@@ -1,7 +1,9 @@
 package com.mp3.experiments.ui.views.customer
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import com.denzcoskun.imageslider.ImageSlider
 import com.denzcoskun.imageslider.constants.ActionTypes
 import com.denzcoskun.imageslider.constants.AnimationTypes
@@ -59,5 +61,6 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         })
+
     }
 }

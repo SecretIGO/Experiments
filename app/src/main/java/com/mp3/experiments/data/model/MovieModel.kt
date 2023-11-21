@@ -1,6 +1,7 @@
 package com.mp3.experiments.data.model
 
 class MovieModel (
+    val image : Int,
     val movie_name : String? = "",
     val movie_price : Double? = 0.0,
     val movie_date_active : String? = "",
