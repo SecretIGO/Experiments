@@ -18,6 +18,7 @@ import com.mp3.experiments.data.states.AuthenticationStates
 import com.mp3.experiments.data.viewmodel.UserViewModel
 import com.mp3.experiments.databinding.ActivitySigninBinding
 import com.mp3.experiments.ui.views.admin.AdminActivity
+import com.mp3.experiments.ui.views.customer.HomeActivity
 import com.mp3.experiments.ui.views.customer.MovieTheatreSelectionActivity
 import com.mp3.experiments.ui.views.customer.SeatSelectionActivity
 import java.io.ByteArrayOutputStream
@@ -97,7 +98,7 @@ class SigninActivity : AppCompatActivity() {
             )
 
             is AuthenticationStates.ProfileUpdated -> {
-                startActivity(Intent(this@SigninActivity, MovieTheatreSelectionActivity::class.java))
+                startActivity(Intent(this@SigninActivity, HomeActivity::class.java))
                 finish()
             }
             else -> {}
@@ -107,7 +108,7 @@ class SigninActivity : AppCompatActivity() {
     private fun auth_func(state : AuthenticationStates) {
         when(state) {
             AuthenticationStates.SignedIn -> {
-                startActivity(Intent(this@SigninActivity, MovieTheatreSelectionActivity::class.java))
+                startActivity(Intent(this@SigninActivity, HomeActivity::class.java))
                 finish()
             }
             else -> {}
@@ -123,7 +124,7 @@ class SigninActivity : AppCompatActivity() {
         when(states) {
             is AuthenticationStates.IsSignedIn -> {
                 if(states.isSignedIn) {
-                    startActivity(Intent(this@SigninActivity, MovieTheatreSelectionActivity::class.java))
+                    startActivity(Intent(this@SigninActivity, HomeActivity::class.java))
                     finish()
                 }
             }

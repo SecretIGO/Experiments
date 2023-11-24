@@ -1,9 +1,13 @@
 package com.mp3.experiments.ui.views.customer
 
 import android.content.Intent
+import android.icu.text.IDNA
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Adapter
 import android.widget.Button
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.denzcoskun.imageslider.ImageSlider
 import com.denzcoskun.imageslider.constants.ActionTypes
 import com.denzcoskun.imageslider.constants.AnimationTypes
@@ -13,54 +17,80 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.interfaces.TouchListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.mp3.experiments.R
+import com.mp3.experiments.data.model.ComingSoonModel
+import com.mp3.experiments.data.model.HomeMovieModel
+import com.mp3.experiments.data.model.MovieModel
+import com.mp3.experiments.data.model.NowShowingModel
+import com.mp3.experiments.databinding.ActivityHomeBinding
+import com.mp3.experiments.ui.adapters.ComingSoonAdapter
+import com.mp3.experiments.ui.adapters.MovieCarouselAdapter
+import com.mp3.experiments.ui.adapters.NowShowingAdapter
 
 class HomeActivity : AppCompatActivity() {
+
+    private lateinit var nowshowingadapter: NowShowingAdapter
+    private lateinit var comingsoonadapter: ComingSoonAdapter
+    private lateinit var nowshowinglist: ArrayList<NowShowingModel>
+    private lateinit var comingsoonlist: ArrayList<ComingSoonModel>
+    private lateinit var binding: ActivityHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        val imageSlider = findViewById<ImageSlider>(R.id.image_slider) // init imageSlider
+        val movielist = ArrayList<HomeMovieModel>()
+        movielist.add(HomeMovieModel(R.drawable.movie1, "Fast X"))
+        movielist.add(HomeMovieModel(R.drawable.movie2, "Spider-Man"))
+        movielist.add(HomeMovieModel(R.drawable.movie3, "Barbie"))
+        movielist.add(HomeMovieModel(R.drawable.movie4, "The Marvels"))
+        movielist.add(HomeMovieModel(R.drawable.movie5, "Five Nights at Freddy's"))
 
-        val imageList = ArrayList<SlideModel>() // Create image list
-        imageList.add(SlideModel("https://www.cnet.com/a/img/resize/e40db3b1ecae8c7de688981520ac2c3d8c7c9617/hub/2023/08/16/23d96691-7b64-4113-81f8-71f8430f9aff/fast-x-peacock.jpg?auto=webp&width=1200"))
-        imageList.add(SlideModel("https://assets-prd.ignimgs.com/2023/10/17/spidermanacrossthespiderversereview-blogroll-1685535068711-1697563405199.jpg"))
-        imageList.add(SlideModel("https://www.barbie-themovie.com/images/share.jpg"))
-        imageList.add(SlideModel("https://images.everyeye.it/img-notizie/the-marvels-marvel-annuncia-sorpresa-sceneggiatore-copione-scritto-8-mani-v3-627413.jpg"))
-        imageList.add(SlideModel("https://roost.nbcuni.com/bin/viewasset.html/content/dam/Peacock/Landing-Pages/campaign/fnaf/fnaf-trailer-thumbnail.jpg/_jcr_content/renditions/original.JPG"))
+        val adapter = MovieCarouselAdapter(movielist)
 
-        imageSlider.setImageList(imageList, ScaleTypes.FIT)
+        binding.apply {
+            carouselRecyclerView.adapter = adapter
+            carouselRecyclerView.set3DItem(true)
+            carouselRecyclerView.setAlpha(true)
+            carouselRecyclerView.setInfinite(true)
+        }
 
-        imageSlider.setSlideAnimation(AnimationTypes.ZOOM_OUT)
 
-        imageSlider.setItemClickListener(object : ItemClickListener {
-            override fun onItemSelected(position: Int) {
-                // You can listen here.
-                println("normal")
-            }
+        binding.rvNowShowing.setHasFixedSize(true)
 
-            override fun doubleClick(position: Int) {
-                // Do not use onItemSelected if you are using a double click listener at the same time.
-                // Its just added for specific cases.
-                // Listen for clicks under 250 milliseconds.
-                println("its double")
-            }
-        })
+        nowshowinglist = ArrayList()
+        nowshowinglist.add(NowShowingModel(R.drawable.movie1, "Fast X", "200"))
+        nowshowinglist.add(NowShowingModel(R.drawable.movie2, "Spider-Man", "200"))
+        nowshowinglist.add(NowShowingModel(R.drawable.movie3, "Barbie", "200"))
+        nowshowinglist.add(NowShowingModel(R.drawable.movie4, "The Marvels", "200"))
+        nowshowinglist.add(NowShowingModel(R.drawable.movie5, "Five Nights at Freddy's", "200"))
 
-        imageSlider.setItemChangeListener(object : ItemChangeListener {
-            override fun onItemChanged(position: Int) {
-                //println("Pos: " + position)
-            }
-        })
+        nowshowingadapter = NowShowingAdapter(nowshowinglist) { selectedNowShowing ->
 
-        imageSlider.setTouchListener(object : TouchListener {
-            override fun onTouched(touched: ActionTypes, position: Int) {
-                if (touched == ActionTypes.DOWN){
-                    imageSlider.stopSliding()
-                } else if (touched == ActionTypes.UP ) {
-                    imageSlider.startSliding(5000)
-                }
-            }
-        })
+            val intent = Intent(this@HomeActivity, MovieTheatreSelectionActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.rvNowShowing.adapter = nowshowingadapter
+        binding.rvNowShowing.layoutManager = LinearLayoutManager(this)
+
+
+        binding.rvComingSoon.setHasFixedSize(true)
+
+        comingsoonlist = ArrayList()
+        comingsoonlist.add(ComingSoonModel(R.drawable.movie6, "Despicable Me 4"))
+        comingsoonlist.add(ComingSoonModel(R.drawable.movie7, "Deadpool 3"))
+        comingsoonlist.add(ComingSoonModel(R.drawable.movie8, "Kingdom of The Planet of The Apes"))
+        comingsoonlist.add(ComingSoonModel(R.drawable.movie9, "Godzilla X Kong The New Empire"))
+        comingsoonlist.add(ComingSoonModel(R.drawable.movie10, "Sonic the Hedgehog 3"))
+
+        comingsoonadapter = ComingSoonAdapter(comingsoonlist) { selectedComingSoon ->
+
+            Toast.makeText(this, "Coming Soon... Stay Tuned!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.rvComingSoon.adapter = comingsoonadapter
+        binding.rvComingSoon.layoutManager = LinearLayoutManager(this)
 
     }
 }

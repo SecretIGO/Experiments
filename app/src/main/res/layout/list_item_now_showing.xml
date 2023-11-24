@@ -2,7 +2,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardViewNowShowing"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -25,47 +24,70 @@
             android:weightSum="4">
 
             <ImageView
-                android:id="@+id/iv_NowShowing"
+                android:id="@+id/movieImageNowShowing"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"/>
 
-            <TextView
-                android:id="@+id/tv_nameNowShowing"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="MOVIE NAME : FAST X"
-                android:gravity="bottom"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MOVIE NAME : "
+                    android:gravity="bottom"/>
+
+                <TextView
+                    android:id="@+id/tv_nameNowShowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:text="Title" />
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PRICE : "
+                android:gravity="bottom"/>
+
+        <TextView
                 android:id="@+id/tv_priceNowShowing"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="PRICE : 400"
-                android:gravity="center_vertical"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount"
+                android:gravity="bottom"/>
+
+        </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_line"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:text="- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - "
                 android:gravity="center_vertical"/>
 
             <TextView
-                android:id="@+id/tv_timeslot"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:text="TIMESLOT :"
                 android:gravity="top"/>
 
             <Spinner
                 android:id="@+id/timeslotSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
+                android:layout_height="30dp"
+                android:layout_marginTop="0dp"/>
 
         </LinearLayout>
 
