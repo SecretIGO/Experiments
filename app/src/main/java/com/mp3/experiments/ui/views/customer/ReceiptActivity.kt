@@ -53,7 +53,7 @@ class ReceiptActivity : AppCompatActivity() {
         }
 
         binding.btnDone.setOnClickListener{
-            startActivity(Intent(this, MovieTheatreSelectionActivity::class.java))
+            startActivity(Intent(this, HomeActivity::class.java))
         }
     }
 

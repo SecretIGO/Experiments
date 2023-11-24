@@ -39,6 +39,7 @@ class TicketsAdapter (
 
     fun addTickets(tickets: List<TicketModel>) {
         ticketList.addAll(tickets)
+        ticketList.reverse()
         notifyDataSetChanged()
     }
 
@@ -63,7 +64,9 @@ class TicketsAdapter (
             binding.tvMovieTimeslot.text = ticket.movie_time
             binding.tvMovieSeats.text = ticket.selected_seats
             binding.tvTicketIssueDate.text = ticket.ticket_buy_date
-            binding.tvTotalAmount.text = ticket.total_price.toString()
+
+            val formattedTotalPrice = String.format("%.2f", ticket.total_price)
+            binding.tvTotalAmount.text = formattedTotalPrice
         }
     }
 }

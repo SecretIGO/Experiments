@@ -11,4 +11,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="theatre_selection">Theatre Selection</string>
     <string name="movie_selection">Movie Selection</string>
+    <string name="movie_details">Movie Details</string>
 </resources>

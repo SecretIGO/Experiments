@@ -199,7 +199,6 @@ class CinemaViewModel : ViewModel() {
                 for (timeslotSnapshot in dataSnapshot.children) {
                     val timeslot = timeslotSnapshot.getValue(SeatTimeslotModel::class.java)
                     timeslots.add(timeslot)
-
                     Log.d("test1234", "time : ${timeslot?.time} occupied : ${timeslot?.occupied}")
                 }
 

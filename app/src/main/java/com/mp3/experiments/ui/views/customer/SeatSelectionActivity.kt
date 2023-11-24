@@ -78,6 +78,8 @@ class   SeatSelectionActivity : AppCompatActivity(), LoopCompleteCallbackInterfa
         binding.tvTheatreNumber.text = "Theatre$theatreNumber"
         binding.tvTimeslot.text = time
 
+        binding.tvMovieName.isSelected = true
+
         if (receivedMatrix != null) {
             seatOccupied = receivedMatrix
         }

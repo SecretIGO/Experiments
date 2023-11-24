@@ -1,11 +1,18 @@
 package com.mp3.experiments.data.viewmodel
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.mp3.experiments.data.model.CinemaModel
@@ -21,6 +28,12 @@ import com.mp3.experiments.data.nodes.NODE_MOVIE_TIMESLOT
 import com.mp3.experiments.data.nodes.NODE_SEATS
 import com.mp3.experiments.data.nodes.NODE_UPPERBOX
 import com.mp3.experiments.data.states.StorageStates
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
+
 
 class MovieViewModel : ViewModel(){
 
@@ -28,6 +41,12 @@ class MovieViewModel : ViewModel(){
     private val firebase_storage = Firebase.storage.reference
 
     private var storage_states = MutableLiveData<StorageStates>()
+
+    private val _moviesNowShowing = MutableLiveData<List<MovieModel>>()
+    val moviesNowShowing: LiveData<List<MovieModel>> get() = _moviesNowShowing
+
+    private val _moviesComingSoon = MutableLiveData<List<MovieModel>>()
+    val moviesComingSoon: LiveData<List<MovieModel>> get() = _moviesComingSoon
 
     fun checkIfMovieExist(movieName : String): Task<Boolean> {
         val movieRef = firebase_database
@@ -42,6 +61,9 @@ class MovieViewModel : ViewModel(){
                 false
             }
         }
+    }
+
+    fun getNowShowingMovies(){
 
     }
 
@@ -108,6 +130,67 @@ class MovieViewModel : ViewModel(){
         }
     }
 
+    fun observeNowShowingMovies() {
+        val movieRef = firebase_database.child(NODE_MOVIES)
+
+        val moviesListener = object : ValueEventListener {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val moviesList: MutableList<MovieModel> = mutableListOf()
+
+                for (movieSnapshot in dataSnapshot.children) {
+                    val movie = movieSnapshot.getValue<MovieModel>()
+
+                    val status = isMovieWithinCurrentDate(movie?.movie_date_active, movie?.movie_date_end)
+
+                    Log.d("MovieDateChecker", "${movie?.movie_name} - Now Showing? : $status")
+
+                    if(status)
+                        moviesList.add(movie!!)
+                }
+
+                _moviesNowShowing.value = moviesList
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors if necessary
+                Log.e("CinemaObserver", "Error loading cinemas: ${databaseError.message}")
+            }
+        }
+
+        movieRef.addValueEventListener(moviesListener)
+    }
+
+    fun observeComingSoonMovies() {
+        val movieRef = firebase_database.child(NODE_MOVIES)
+
+        val moviesListener = object : ValueEventListener {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val moviesList: MutableList<MovieModel> = mutableListOf()
+
+                for (movieSnapshot in dataSnapshot.children) {
+                    val movie = movieSnapshot.getValue<MovieModel>()
+
+                    val status = isMovieComingSoon(movie?.movie_date_active!!)
+
+                    Log.d("MovieDateChecker", "${movie.movie_name} - Coming Soon? : $status")
+
+                    if(status)
+                        moviesList.add(movie)
+                }
+
+                _moviesComingSoon.value = moviesList
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("CinemaObserver", "Error loading cinemas: ${databaseError.message}")
+            }
+        }
+
+        movieRef.addValueEventListener(moviesListener)
+    }
+
     fun getMovieDetails(movieRef: DatabaseReference, movieName: String, callback: (MovieModel) -> Unit) {
         movieRef.child(movieName).get().addOnSuccessListener { snapshot ->
             val movie = snapshot.getValue(MovieModel::class.java)
@@ -119,5 +202,41 @@ class MovieViewModel : ViewModel(){
         }.addOnFailureListener {
             Log.d("test123", "Failure : $it")
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun isMovieWithinCurrentDate(startDate: String?, endDate: String?): Boolean {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val currentDate = Calendar.getInstance().time
+
+        try {
+            val movieStartDate = dateFormat.parse(startDate!!)
+            val movieEndDate = dateFormat.parse(endDate!!)
+
+            return currentDate.after(movieStartDate) && currentDate.before(movieEndDate)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return false
+    }
+
+    fun isMovieComingSoon(startDate: String): Boolean {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val currentDate = Calendar.getInstance().time
+
+        try {
+            val movieStartDate = dateFormat.parse(startDate)
+
+            return currentDate.before(movieStartDate)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return false
     }
 }

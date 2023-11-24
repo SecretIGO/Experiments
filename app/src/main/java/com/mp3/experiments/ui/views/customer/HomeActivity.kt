@@ -1,7 +1,15 @@
 package com.mp3.experiments.ui.views.customer
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.denzcoskun.imageslider.ImageSlider
 import com.denzcoskun.imageslider.constants.ActionTypes
 import com.denzcoskun.imageslider.constants.AnimationTypes
@@ -11,11 +19,70 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.interfaces.TouchListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.mp3.experiments.R
+import com.mp3.experiments.data.states.AuthenticationStates
+import com.mp3.experiments.data.viewmodel.CinemaViewModel
+import com.mp3.experiments.data.viewmodel.MovieViewModel
+import com.mp3.experiments.data.viewmodel.UserViewModel
+import com.mp3.experiments.databinding.ActivityHomeBinding
+import com.mp3.experiments.databinding.ToolbarLayoutBinding
+import com.mp3.experiments.ui.adapters.ComingSoonAdapter
+import com.mp3.experiments.ui.adapters.NowShowingAdapter
+import com.mp3.experiments.ui.adapters.TheatreMoviesAdapter
+import com.mp3.experiments.ui.views.customer.user.ProfileActivity
 
 class HomeActivity : AppCompatActivity() {
+    private var doubleBackToExitPressedOnce = false
+
+    private lateinit var binding : ActivityHomeBinding
+    private lateinit var toolbar : ToolbarLayoutBinding
+    private lateinit var viewModel : MovieViewModel
+    private lateinit var auth_vm : UserViewModel
+    private lateinit var adapterNowShowing: NowShowingAdapter
+    private lateinit var adapterComingSoon: ComingSoonAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        toolbar = ToolbarLayoutBinding.bind(binding.root)
+        setContentView(binding.root)
+
+        toolbar.tvToolbarTitle.setText(R.string.app_name)
+        toolbar.btnBack.visibility = View.GONE
+
+        toolbar.llUsername.setOnClickListener{
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
+
+        viewModel = MovieViewModel()
+        auth_vm = UserViewModel()
+
+        auth_vm.getUserProfile()
+        auth_vm.getAuthStates().observe(this@HomeActivity){
+            auth_func(it)
+        }
+
+        adapterNowShowing = NowShowingAdapter(this, ArrayList())
+        binding.rvNowShowingItems.adapter = adapterNowShowing
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvNowShowingItems.layoutManager = layoutManager
+
+        viewModel.moviesNowShowing.observe(this, Observer {
+            adapterNowShowing.addMovies(it)
+        })
+        viewModel.observeNowShowingMovies()
+
+        adapterComingSoon = ComingSoonAdapter(this, ArrayList())
+        binding.rvComingSoonItems.adapter = adapterComingSoon
+        val layoutManager0 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvComingSoonItems.layoutManager = layoutManager0
+
+        viewModel.moviesComingSoon.observe(this, Observer {
+            adapterComingSoon.addMovies(it)
+        })
+        viewModel.observeComingSoonMovies()
+
+        binding.btnBookMovie.setOnClickListener {
+            startActivity(Intent(this@HomeActivity, MovieTheatreSelectionActivity::class.java))
+        }
 
         val imageSlider = findViewById<ImageSlider>(R.id.image_slider) // init imageSlider
 
@@ -59,5 +126,31 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
+            return
+        }
+
+        this.doubleBackToExitPressedOnce = true
+        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_LONG).show()
+
+        Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+    }
+
+    private fun auth_func(authenticationStates: AuthenticationStates) {
+        when (authenticationStates) {
+            is AuthenticationStates.Default -> {
+                toolbar.tvUsername.text = authenticationStates.user?.user_details?.username
+                Glide.with(this)
+                    .load(authenticationStates.user?.user_details?.user_profilePicture)
+                    .centerCrop()
+                    .into(toolbar.ivUserProfile)
+            }
+            AuthenticationStates.LogOut -> super.finish()
+            else -> {}
+        }
     }
 }
