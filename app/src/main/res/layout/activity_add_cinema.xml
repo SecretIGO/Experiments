@@ -124,76 +124,138 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/input_upperLength"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:hint="@string/hint_upperbox_length" />
+                    android:padding="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_logo"
+                    tools:layout_editor_absoluteX="0dp"
+                    android:layout_weight="1">
 
-                <EditText
-                    android:id="@+id/input_upperWidth"
+                    <EditText
+                        android:id="@+id/input_upperLength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:hint="@string/hint_upperbox_length" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:hint="@string/hint_upperbox_width" />
+                    android:padding="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_logo"
+                    tools:layout_editor_absoluteX="0dp"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/input_upperWidth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:hint="@string/hint_upperbox_width" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/input_middleLength"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:hint="@string/hint_middlebox_length" />
+                    android:padding="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_logo"
+                    tools:layout_editor_absoluteX="0dp"
+                    android:layout_weight="1">
 
-                <EditText
-                    android:id="@+id/input_middleWidth"
+                    <EditText
+                        android:id="@+id/input_middleLength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:hint="@string/hint_middlebox_length" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:hint="@string/hint_middlebox_width" />
+                    android:padding="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_logo"
+                    tools:layout_editor_absoluteX="0dp"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/input_middleWidth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:hint="@string/hint_middlebox_width" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/input_lowerLength"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:hint="@string/hint_lowerbox_length" />
+                    android:padding="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_logo"
+                    tools:layout_editor_absoluteX="0dp"
+                    android:layout_weight="1">
 
-                <EditText
-                    android:id="@+id/input_lowerWidth"
+                    <EditText
+                        android:id="@+id/input_lowerLength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:hint="@string/hint_lowerbox_length" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:hint="@string/hint_lowerbox_width" />
+                    android:padding="10dp"
+                    app:layout_constraintTop_toBottomOf="@+id/rl_logo"
+                    tools:layout_editor_absoluteX="0dp"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/input_lowerWidth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:inputType="number"
+                        android:hint="@string/hint_lowerbox_width" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
             </LinearLayout>
 
 
